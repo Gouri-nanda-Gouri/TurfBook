@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>District</title>
+</head>
+
+<body>
+    <form name="" method="POST">
+        {% csrf_token %}
+        <table border="1" align="center">
+            <tr>
+                <td>District</td>
+                <td><input type="text" name="txt_Dis" placeholder="Enter District"
+                        value="{{districtOne.district_name}}"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" name="btn_dis" value="SUBMIT">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br>
+    <table border="1">
+        <tr>
+            <td>SL NO</td>
+            <td>District</td>
+            <td>Action</td>
+        </tr>
+        {% for i in dis %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.district_name}}</td>
+            <td><a href="{%  url 'Administrator:DeleteDistrict' i.id %}">Delete</a>&nbsp;<a
+                    href="{%  url 'Administrator:UpdateDistrict' i.id %}">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+
+</html>

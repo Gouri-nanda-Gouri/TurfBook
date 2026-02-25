@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Management</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Sports</title>
+</head>
+<body>
+
+<h2>Manage Sports</h2>
+
+
+
+<form method="POST">
+{% csrf_token %}
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <td>Sport Name</td>
+    <td>
+        <input type="text" name="txt_sport" required>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2" align="center">
+        <input type="submit" value="Add Sport">
+    </td>
+</tr>
+
+</table>
+
+</form>
+
+<br><br>
+
+<h3>Sports List</h3>
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Sl No</th>
+    <th>Sport Name</th>
+    <th>Action</th>
+</tr>
+
+{% for i in sports %}
+<tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{i.sports_name}}</td>
+    <td>
+        <a href="{% url 'Administrator:DeleteSports' i.id %}">Delete</a>|
+         <a href="{% url 'Administrator:UpdateSports' i.id %}">Edit</a>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="3" align="center">No sports added yet</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
+    
+</body>
+</html>
+{% if msg %}
+<script>alert("{{msg}}")
+window.location="{% url 'Administrator:Sports' %}"
+
+</script>
+{% endif %}

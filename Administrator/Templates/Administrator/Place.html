@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form name="formplace" method="POST">
+        {% csrf_token %}
+        <table border="1">
+            <tr>
+                <td>District</td>
+                <td>
+
+                    <select name="sel_district">
+                        <option value="">--select--</option>
+                        {% for i in disData %}
+                        <option {% if i.id == editdata.district.id %} selected {% endif %} value="{{i.id}}">
+                            {{i.district_name}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Place</td>
+                <td><input type="text" name="txt_place" placeholder="Enter Place" value="{{editdata.place_name}}"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="btn_place" value="Submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <br>
+    <table border="1">
+        <tr>
+            <td>SL NO</td>
+            <td>District</td>
+            <td>Place</td>
+            <td>Action</td>
+        </tr>
+        {% for i in placeData %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.district.district_name}}</td>
+            <td>{{i.place_name}}</td>
+            <td><a href="{%  url 'Administrator:DeletePlace' i.id %}">Delete</a>
+                <a href="{%  url 'Administrator:editplace' i.id %}">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
+{% if msg %}
+<script>
+    alert("{{msg}}");
+    window.location = "{% url 'Administrator:Place' %}";
+</script>
+{% endif %}

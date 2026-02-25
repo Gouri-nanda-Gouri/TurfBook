@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form name="formcalculator" method="post">
+        {% csrf_token %}
+        <table border="1">
+            <tr>
+                <td>Number-1</td>
+                <td>
+                    <input type="text" name="txtno1" placeholder="Enter Number">
+                </td>
+            </tr>
+            <tr>
+                <td>Number-2</td>
+                <td>
+                    <input type="text" name="txtno2" placeholder="Enter Number">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="btn_submit" value="+">
+                    <input type="submit" name="btn_submit" value="-">
+                    <input type="submit" name="btn_submit" value="/">
+                    <input type="submit" name="btn_submit" value="*">
+                </td>
+            </tr>
+            <tr>
+                <td>Result</td>
+                <td>{{result}}</td>
+            </tr>
+        </table>
+    </form>
+
+
+</body>
+
+</html>

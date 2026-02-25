@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Owner Verification</title>
+</head>
+<body>
+
+<h1>Owner Verification Panel</h1>
+
+<!-- ================= PENDING OWNERS ================= -->
+
+<h2>Pending Owners</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>Photo</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Password</th>
+    <th>Phone</th>
+    <th>Address</th>
+    <th>Proof</th>
+    <th>District</th>
+    <th>Place</th>
+    <th>Action</th>
+</tr>
+
+{% for i in pendingOwners %}
+<tr>
+
+    <td><img src="{{i.owner_photo.url}}" width="80"></td>
+
+    <td>{{i.owner_name}}</td>
+    <td>{{i.owner_email}}</td>
+
+    <td>******</td>
+
+    <td>{{i.owner_phone}}</td>
+    <td>{{i.owner_address}}</td>
+
+    <td>
+        <a href="{{i.owner_proof.url}}" target="_blank">View Proof</a>
+    </td>
+
+    <td>{{i.place.district.district_name}}</td>
+    <td>{{i.place.place_name}}</td>
+
+    <td>
+        <a href="{% url 'Administrator:ApproveOwner' i.id %}">Approve</a> |
+        <a href="{% url 'Administrator:RejectOwner' i.id %}">Reject</a>
+    </td>
+
+</tr>
+{% empty %}
+<tr>
+    <td colspan="10">No pending owners</td>
+</tr>
+{% endfor %}
+</table>
+
+<br><br>
+
+
+<!-- ================= APPROVED OWNERS ================= -->
+
+<h2>Approved Owners</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>Photo</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th>Address</th>
+    <th>Proof</th>
+    <th>District</th>
+    <th>Place</th>
+    <th>Action</th>
+</tr>
+
+{% for i in approvedOwners %}
+<tr>
+
+    <td><img src="{{i.owner_photo.url}}" width="80"></td>
+    <td>{{i.owner_name}}</td>
+    <td>{{i.owner_email}}</td>
+    <td>{{i.owner_phone}}</td>
+    <td>{{i.owner_address}}</td>
+
+    <td>
+        <a href="{{i.owner_proof.url}}" target="_blank">View Proof</a>
+    </td>
+
+    <td>{{i.place.district.district_name}}</td>
+    <td>{{i.place.place_name}}</td>
+
+    <td>
+        <a href="{% url 'Administrator:RejectOwner' i.id %}">Reject</a>
+    </td>
+
+</tr>
+{% empty %}
+<tr>
+    <td colspan="9">No approved owners</td>
+</tr>
+{% endfor %}
+</table>
+
+<br><br>
+
+
+<!-- ================= REJECTED OWNERS ================= -->
+
+<h2>Rejected Owners</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>Photo</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th>Address</th>
+    <th>Proof</th>
+    <th>District</th>
+    <th>Place</th>
+</tr>
+
+{% for i in rejectedOwners %}
+<tr>
+
+    <td><img src="{{i.owner_photo.url}}" width="80"></td>
+    <td>{{i.owner_name}}</td>
+    <td>{{i.owner_email}}</td>
+    <td>{{i.owner_phone}}</td>
+    <td>{{i.owner_address}}</td>
+
+    <td>
+        <a href="{{i.owner_proof.url}}" target="_blank">View Proof</a>
+    </td>
+
+    <td>{{i.place.district.district_name}}</td>
+    <td>{{i.place.place_name}}</td>
+
+</tr>
+{% empty %}
+<tr>
+    <td colspan="8">No rejected owners</td>
+</tr>
+{% endfor %}
+</table>
+
+<br><br>
+
+
+
+</body>
+</html>

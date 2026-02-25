@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form name="formreg" method="POST" >
+        {% csrf_token %}
+        <table border="1">
+            <tr>
+                <td>
+                    <img src="{{UserData.userregistration_photo.url}}" width="50" alt="">
+                </td>
+            </tr>
+            <tr>
+                <td> Name </td>
+                <td> {{UserData.userregistration_name}}</td>
+            </tr>
+            <tr>
+                <td> Email </td>
+                <td> {{UserData.userregistration_email}} </td>
+            </tr>
+           
+            <tr>
+                <td> Contact </td>
+                <td> {{UserData.userregistration_contact}} </td>
+            </tr>
+    
+            <tr>
+                <td> DOB </td>
+                <td> {{UserData.userregistration_dob}} </td>
+            </tr>
+            <tr>
+                <td> Disrtrict </td>
+                <td> 
+                    {{UserData.place.district.district_name}}
+                </td>
+            </tr>
+            <tr>
+                <td> Place </td>
+                <td> {{UserData.place.place_name}} </td>
+            </tr>
+            <tr> 
+                
+                <td colspan="2"> <a href="{%  url 'User:ChangePassword' %}">Change Passworrd</a>&nbsp;<a
+                    href="{%  url 'User:EditProfile' %}">Edit Profile</a></td>
+                </tr>
+
+            
+        
+        
+        
+        
+        </table>
+            </form>
+            
+    
+           
+
+    
+</body>
+</html>

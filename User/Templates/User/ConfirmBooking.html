@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Booking</title>
+</head>
+<body>
+
+<h2>Confirm Booking</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<table border="1" cellpadding="8">
+
+<tr>
+<td>Turf</td>
+<td>{{slot.turf.turf_name}}</td>
+</tr>
+
+<tr>
+<td>Slot Time</td>
+<td>{{slot.slot_time}}</td>
+</tr>
+
+<tr>
+<td>Booking Date</td>
+<td>{{today}}</td>
+</tr>
+
+<tr>
+<td>Play Date</td>
+<td>
+<input type="date" name="txt_date" required>
+</td>
+</tr>
+<tr>
+<td>Number of Players</td>
+<td>
+<input type="number" name="txt_players" min="1" required>
+</td>
+</tr>
+
+<tr>
+<td>Amount</td>
+<td>₹{{slot.slot_amount}}</td>
+</tr>
+
+<tr>
+<td colspan="2" align="center">
+<input type="submit" value="Confirm Booking">
+</td>
+</tr>
+
+</table>
+
+</form>
+
+{% if msg %}
+<script>
+    alert("{{msg}}");
+    // window.location.href="{% url 'User:MyBookings' %}";
+</script>
+{% endif %}
+
+</body>
+</html>

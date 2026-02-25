@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Owner Profile</title>
+</head>
+<body>
+
+<form method="POST">
+    {% csrf_token %}
+    <table border="1">
+
+        <tr>
+            <td>Name</td>
+            <td>
+                <input type="text" name="txt_name"
+                       value="{{OwnerData.owner_name}}" required>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Email</td>
+            <td>
+                <input type="email" name="txt_email"
+                       value="{{OwnerData.owner_email}}" required>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Contact</td>
+            <td>
+                <input type="text" name="txt_contact"
+                       value="{{OwnerData.owner_phone}}" required>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="btn_update" value="UPDATE">
+            </td>
+        </tr>
+
+    </table>
+</form>
+
+{% if msg %}
+<script>
+    alert("{{msg}}");
+    window.location = "{% url 'TurfOwner:MyProfile' %}";
+</script>
+{% endif %}
+
+</body>
+</html>

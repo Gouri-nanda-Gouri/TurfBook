@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Owner Booking Requests</title>
+</head>
+
+<body>
+
+    <h2>Booking Requests</h2>
+
+    <table border="1" cellpadding="8">
+
+        <tr>
+            <th>Sl No</th>
+            <th>User</th>
+            <th>Turf</th>
+            <th>Slot</th>
+            <th>Play Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for i in bookings %}
+        <tr>
+
+            <td>{{forloop.counter}}</td>
+
+            <td>{{i.user.user_name}}</td>
+
+            <td>{{i.slot.turf.turf_name}}</td>
+
+            <td>{{i.slot.slot_time}}</td>
+
+            <td>{{i.booking_todate}}</td>
+
+
+            <td>
+                {% if i.booking_status == 0 %}
+                Pending
+                {% elif i.booking_status == 1 %}
+                Approved
+                {% elif i.booking_status == 2 %}
+                Cancelled
+                {% elif i.booking_status == 3 %}
+                Rejected
+                {% endif %}
+            </td>
+
+            <td>
+
+                {% if i.booking_status == 0 %}
+                <a href="{% url 'TurfOwner:ApproveBooking' i.id %}">Approve</a> |
+                <a href="{% url 'TurfOwner:RejectBooking' i.id %}">Reject</a>
+                 {% elif i.booking_status == 1 %}
+                Approved
+                {% elif i.booking_status == 2 %}
+                Cancelled
+                {% elif i.booking_status == 3 %}
+                Rejected
+              
+                {% endif %}
+
+            </td>
+
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    {% if owner_msg %}
+    <script>
+        alert("{{owner_msg}}");
+    </script>
+    {% endif %}
+
+</body>
+
+</html>

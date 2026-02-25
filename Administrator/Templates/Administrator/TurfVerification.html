@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Turf Verification</title>
+</head>
+<body>
+
+<h1>Turf Verification Panel</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{message}}");</script>
+    {% endfor %}
+{% endif %}
+
+<!-- ================= PENDING TURFS ================= -->
+
+<h2>Pending Turf Requests</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>Image</th>
+    <th>Turf Details</th>
+    <th>Owner</th>
+    <th>Gallery</th>
+    <th>Sports</th>
+    <th>Slots</th>
+    <th>Action</th>
+</tr>
+
+{% for i in pendingTurf %}
+<tr>
+
+    <!-- TURF IMAGE -->
+    <td>
+        <img src="{{i.turf_image.url}}" width="80">
+    </td>
+
+    <!-- TURF BASIC DETAILS -->
+    <td>
+        <b>Name:</b> {{i.turf_name}} <br>
+        <b>Description:</b> {{i.turf_description}} <br>
+        <b>Contact:</b> {{i.turf_contact_number}} <br>
+        <b>Capacity:</b> {{i.turf_capacity}} <br>
+        <b>Place:</b> {{i.place.place_name}}
+    </td>
+
+    <!-- OWNER -->
+    <td>
+        {{i.owner.owner_name}} <br>
+        {{i.owner.owner_phone}}
+    </td>
+
+    <!-- GALLERY -->
+    <td>
+        {% for g in i.tbl_turf_gallery_set.all %}
+            <img src="{{g.gallery_image.url}}" width="60"><br>
+        {% empty %}
+            No images
+        {% endfor %}
+    </td>
+
+    <!-- SPORTS -->
+    <td>
+        {% for s in i.tbl_turf_sports_set.all %}
+            {{s.sport.sports_name}} <br>
+        {% empty %}
+            No sports added
+        {% endfor %}
+    </td>
+
+    <!-- SLOTS -->
+    <td>
+        {% for sl in i.tbl_slot_set.all %}
+            {{sl.slot_time}} - ₹{{sl.slot_amount}} <br>
+        {% empty %}
+            No slots added
+        {% endfor %}
+    </td>
+
+    <!-- ACTION -->
+    <td>
+        <a href="{% url 'Administrator:ApproveTurf' i.id %}">Approve</a> |
+        <a href="{% url 'Administrator:RejectTurf' i.id %}">Reject</a>
+    </td>
+
+</tr>
+{% empty %}
+<tr>
+    <td colspan="7">No pending turfs</td>
+</tr>
+{% endfor %}
+</table>
+
+<br><br>
+
+<!-- ================= APPROVED TURFS ================= -->
+
+<h2>Approved Turfs</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>Image</th>
+    <th>Name</th>
+    <th>Owner</th>
+    <th>Place</th>
+</tr>
+
+{% for i in approvedTurf %}
+<tr>
+    <td><img src="{{i.turf_image.url}}" width="80"></td>
+    <td>{{i.turf_name}}</td>
+    <td>{{i.owner.owner_name}}</td>
+    <td>{{i.place.place_name}}</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="4">No approved turfs</td>
+</tr>
+{% endfor %}
+</table>
+
+<br><br>
+
+<!-- ================= REJECTED TURFS ================= -->
+
+<h2>Rejected Turfs</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>Image</th>
+    <th>Name</th>
+    <th>Owner</th>
+    <th>Place</th>
+</tr>
+
+{% for i in rejectedTurf %}
+<tr>
+    <td><img src="{{i.turf_image.url}}" width="80"></td>
+    <td>{{i.turf_name}}</td>
+    <td>{{i.owner.owner_name}}</td>
+    <td>{{i.place.place_name}}</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="4">No rejected turfs</td>
+</tr>
+{% endfor %}
+</table>
+
+</body>
+</html>

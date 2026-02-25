@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UserList</title>
+</head>
+<body>
+     <table border="1">
+    <tr>
+            <td>SL NO</td>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Contact</td>
+            <td>DOB</td> 
+            <td>Photo</td>
+            <td>District</td>
+            <td>Place</td>
+            <td>Action</td>
+        </tr>
+        {% for i in UserData %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.userregistration_name}}</td>
+            <td>{{i.userregistration_email}}</td>
+            <td>{{i.userregistration_contact}}</td>
+            <td>{{i.userregistration_dob}}</td>
+            <td><img src="{{i.userregistration_photo.url}}" width="50" height="50" alt=""></td>
+            <td>{{i.place.district.district_name}}</td> 
+            <td>{{i.place.place_name}}</td>
+            <td><a href="{%  url 'Administrator:UserAccept' %}">Accept</a>&nbsp;</td>
+             <td><a href="{%  url 'Administrator:UserReject' %}">Reject</a>&nbsp;</td>
+            
+        </tr>
+        {% endfor %}
+        </table>
+
+</body>
+</html>

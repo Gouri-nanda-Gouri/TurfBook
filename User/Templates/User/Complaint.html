@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form name="formreg" method="POST" >
+        {% csrf_token %}
+        <table border="1">
+            <tr>
+                <td> Complaint Title </td>
+                <td> <input type="text" name="txt_complaint" placeholder="Enter Complaint"></td>
+            </tr>
+            <tr>
+                <td> Complaint Content </td>
+                <td><textarea name="txt_content" id=""></textarea></td>
+            </tr>
+           
+           
+            
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="btn_update" value="SUBMIT">
+                </td>
+            </tr>
+    </table>
+    </form>
+</body>
+</html>

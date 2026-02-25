@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form name="formlogin" method="POST">
+        {% csrf_token %}
+        <table border="1">
+            <tr>
+                <td> Email </td>
+                <td> <input type="text" name="txt_email" placeholder="Enter Email"></td>
+            </tr>
+            <tr>
+                <td> Password </td>
+                <td> <input type="text" name="txt_password" placeholder="Enter Password">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" name="btn_reg" value="SUBMIT">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+
+</body>
+
+</html>
+{% if msg %}
+    <script>
+        alert("{{ msg }}");
+        window.location.href = "{% url 'Guest:Login' %}";
+    </script>
+{% endif %}

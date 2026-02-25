@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Profile</title>
+</head>
+<body>
+
+<form method="POST">
+    {% csrf_token %}
+    <table border="1">
+
+        <!-- PHOTO -->
+        <tr>
+            <td colspan="2">
+                <img src="{{OwnerData.owner_photo.url}}" width="100" alt="Owner Photo">
+            </td>
+        </tr>
+
+        <!-- NAME -->
+        <tr>
+            <td>Owner Name</td>
+            <td>{{OwnerData.owner_name}}</td>
+        </tr>
+
+        <!-- EMAIL -->
+        <tr>
+            <td>Email</td>
+            <td>{{OwnerData.owner_email}}</td>
+        </tr>
+
+        <!-- PHONE -->
+        <tr>
+            <td>Phone</td>
+            <td>{{OwnerData.owner_phone}}</td>
+        </tr>
+
+        <!-- ADDRESS -->
+        <tr>
+            <td>Address</td>
+            <td>{{OwnerData.owner_address}}</td>
+        </tr>
+
+        <!-- DISTRICT -->
+        <tr>
+            <td>District</td>
+            <td>{{OwnerData.place.district.district_name}}</td>
+        </tr>
+
+        <!-- PLACE -->
+        <tr>
+            <td>Place</td>
+            <td>{{OwnerData.place.place_name}}</td>
+        </tr>
+
+        <!-- STATUS -->
+        <tr>
+            <td>Status</td>
+            <td>
+                {% if OwnerData.owner_status == 0 %}
+                    Pending
+                {% elif OwnerData.owner_status == 1 %}
+                    Approved
+                {% elif OwnerData.owner_status == 2 %}
+                    Rejected
+                {% elif OwnerData.owner_status == 3 %}
+                    Blocked
+                {% endif %}
+            </td>
+        </tr>
+
+        <!-- ACTION LINKS -->
+        <tr>
+            <td colspan="2">
+                <a href="{% url 'TurfOwner:ChangePassword' %}">Change Password</a>
+                &nbsp; | &nbsp;
+                <a href="{% url 'TurfOwner:EditProfile' %}">Edit Profile</a>
+            </td>
+        </tr>
+
+    </table>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        :root {
+            --primary-blue: #1a73e8;
+            --accent-red: #d93025;
+            --bg-gradient: linear-gradient(135deg, #e8f0fe 0%, #d2e3fc 100%);
+            --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .pay-card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            width: 100%;
+            max-width: 420px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .header i {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--primary-blue);
+        }
+
+        .header b {
+            font-size: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #5f6368;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .text-box {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1.5px solid #dadce0;
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            outline: none;
+            color: #202124;
+        }
+
+        .text-box:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .row-flex {
+            display: flex;
+            gap: 20px;
+        }
+
+        .flex-item {
+            flex: 1;
+        }
+
+        .total-display {
+            background: #f8f9fa;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 25px 0;
+            border: 1px solid #e8eaed;
+        }
+
+        .total-display small {
+            color: #70757a;
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .total-display span {
+            font-weight: 800;
+            font-size: 24px;
+            color: #202124;
+        }
+
+        .button-pay {
+            width: 100%;
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+
+        .button-pay:hover {
+            background-color: #185abc;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.16);
+        }
+
+        .card-icons {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f3f4;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card-icons i {
+            font-size: 32px;
+            filter: grayscale(20%);
+            transition: filter 0.3s;
+        }
+
+        .card-icons i:hover {
+            filter: grayscale(0%);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pay-card">
+        <form action="" method="post">
+            {% csrf_token %}
+            
+            <div class="header">
+                <i class="fa fa-credit-card" style="font-size:48px"></i>
+                <b style="color: var(--accent-red);">Pay</b><b style="color: var(--primary-blue);">ment</b>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Card Number</label>
+                <input type="text" id="credit-card" name="txtacno" required 
+                       autocomplete="off" placeholder="XXXX XXXX XXXX XXXX"
+                       title="Enter Correct Card Number" maxlength="19" class="text-box">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Name on Card</label>
+                <input type="text" name="txtname" required autocomplete="off"
+                       pattern="[a-zA-z ]{3,15}" title="Enter Correct Name"
+                       minlength="3" placeholder="Full Name" class="text-box">
+            </div>
+
+            <div class="row-flex">
+                <div class="flex-item">
+                    <label class="form-label">Expiry</label>
+                    <input id="credit-card-exp" type="text" name="txtexpdate" required 
+                           autocomplete="off" placeholder="MM/YY" pattern="[0-9/]{5,5}"
+                           title="Enter Correct Date" maxlength="5" class="text-box">
+                </div>
+                <div class="flex-item">
+                    <label class="form-label">CVV</label>
+                    <input type="text" id="credit-card-ccv" name="txtccv" required 
+                           autocomplete="off" placeholder="123" pattern="[0-9]{3,3}"
+                           title="Enter Correct CVV" maxlength="3" class="text-box">
+                </div>
+            </div>
+
+            <div class="total-display">
+                <small>Total Payable</small>
+                <span>₹{{advance_amount}} </span>
+            </div>
+
+            <input type="submit" value="Pay Securely" class="button-pay">
+
+            <div class="card-icons">
+                <i class="fa fa-cc-visa" style="color:#1a1f71"></i>
+                <i class="fa fa-cc-paypal" style="color:#003087"></i>
+                <i class="fa fa-cc-mastercard" style="color:#eb001b"></i>
+            </div>
+        </form>
+    </div>
+
+    {% if msg %}
+    <script>
+        alert("{{msg}}")
+        window.location = "{% url 'User:HomePage' %}"
+    </script>
+    {% endif %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.6/jquery.inputmask.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const creditCardInput = document.getElementById("credit-card");
+            const creditCardExp = document.getElementById("credit-card-exp");
+            const creditCardCcv = document.getElementById("credit-card-ccv");
+
+            creditCardInput.addEventListener("input", function () {
+                const inputValue = this.value.replace(/\D/g, ''); 
+                const formattedValue = formatCreditCard(inputValue);
+                this.value = formattedValue;
+            });
+
+            creditCardExp.addEventListener("input", function () {
+                const inputValue = this.value.replace(/\D/g, ''); 
+                const formattedValue = formatExpirationDate(inputValue);
+                this.value = formattedValue;
+            });
+
+            function validateExpirationDate(inputValue) {
+                const month = inputValue.slice(0, 2);
+                const year = inputValue.slice(2, 4);
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear() % 100;
+                const currentMonth = currentDate.getMonth() + 1;
+
+                const isValidMonth = /^\d{2}$/.test(month) && parseInt(month, 10) >= 1 && parseInt(month, 10) <= 12;
+                const isValidYear = /^\d{2}$/.test(year) && parseInt(year, 10) >= currentYear;
+
+                let isValidDate = false;
+                if (isValidMonth && isValidYear) {
+                    const expYear = parseInt(year, 10);
+                    const expMonth = parseInt(month, 10);
+                    if (expYear > currentYear || (expYear === currentYear && expMonth >= currentMonth)) {
+                        isValidDate = true;
+                    }
+                }
+
+                if (!isValidDate) {
+                    alert('Invalid expiration date');
+                    document.getElementById("credit-card-exp").value = '';
+                }
+            }
+
+            creditCardExp.addEventListener("change", function () {
+                const inputValue = this.value.replace(/\D/g, '');
+                validateExpirationDate(inputValue);
+            });
+
+            creditCardCcv.addEventListener("input", function () {
+                const inputValue = this.value.replace(/\D/g, '');
+                const formattedValue = formatCVV(inputValue);
+                this.value = formattedValue;
+            });
+        });
+
+        function formatCreditCard(value) {
+            const groups = value.match(/(\d{1,4})/g) || [];
+            return groups.join(' ');
+        }
+
+        function formatExpirationDate(value) {
+            const groups = value.match(/(\d{1,2})/g) || [];
+            return groups.join('/').slice(0, 5);
+        }
+
+        function formatCVV(value) {
+            return value.slice(0, 3);
+        }
+    </script>
+</body>
+</html>

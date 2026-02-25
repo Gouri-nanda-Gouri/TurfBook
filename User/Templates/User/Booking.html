@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <form name="form" method="POST">
+        {% csrf_token %}
+        <table border="1">
+            <tr>
+                <td>Sport</td>
+                <td>
+
+                      <select name="sel_sports">
+                        <option value="">--select--</option>
+                        {% for i in sportsData %}
+                        <option {% if i.id == editdata.sports.id %} selected {% endif %} value="{{i.id}}">
+                            {{i.sports_name}}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+             
+             <tr>
+                <td> Date </td>
+                <td> <input type="date" name="txt_date" placeholder="Enter Date"></td>
+
+
+                  <tr>
+                <td colspan="2">
+                    <input type="submit" name="btn_sub" value="SUBMIT">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</body>
+</html>

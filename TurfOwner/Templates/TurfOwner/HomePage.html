@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Turf Owner Home Page
+    <br>
+    <br>
+    <a href="{% url 'TurfOwner:MyProfile' %}">My Profile</a>
+    <br>
+    <br>
+    <a href="{% url 'TurfOwner:EditProfile' %}">Edit Profile</a>
+    <br>
+    <br>
+    <a href="{% url 'TurfOwner:ChangePassword' %}">Change Password</a>
+     <br>
+     <br>
+    <a href="{% url 'TurfOwner:AddTurf' %}">Add Turf</a>
+    <br>
+    <br>
+        <a href="{% url 'TurfOwner:MyTurf' %}">My Turf</a>
+        <br>
+        <br>
+
+    <a href="{% url 'TurfOwner:MySports' %}">My Sports</a>
+    <br>
+    <br>
+    <a href="{% url 'TurfOwner:Slot' %}">Slot</a>
+     <br>
+     <br>
+    <a href="{% url 'TurfOwner:Sports' %}">Sports</a>
+    <br>
+</body>
+</html>

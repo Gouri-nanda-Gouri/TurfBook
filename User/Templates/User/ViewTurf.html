@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <tr>
+                <td>District</td>
+                <td>
+
+                    <select name="sel_district" id="sel_district">
+                        <option value="">--select--</option>
+                        {% for i in district %}
+                        <option value="{{i.id}}">
+                            {{i.district_name}}</option>
+                        {% endfor %}
+
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Place</td>
+                <td>
+
+                    <select name="sel_place" id="sel_place">
+                        <option value="">--select--</option>
+                    </select>
+                </td>
+            </tr>
+
+    <table border="1" id="result">
+<tr>
+    <th>Sl No</th>
+    <th>Turf Name</th>
+    <th>Description</th>
+    <th>Contact</th>
+    <th>Capacity</th>
+    <th>Place</th>
+    <th>Image</th>
+    <th>Action</th>
+</tr>
+
+{% for i in turfs %}
+<tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{i.turf_name}}</td>
+    <td>{{i.turf_description}}</td>
+    <td>{{i.turf_contact_number}}</td>
+    <td>{{i.turf_capacity}}</td>
+    <td>{{i.place.place_name}}</td>
+    <td>
+        <img src="{{i.turf_image.url}}" width="60">
+    </td>
+    <td>
+        <a href="{% url 'User:ViewSlot' i.id %}">
+            View Slot
+        </a>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="8" align="center">No turfs available</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#sel_district").change(function () {
+        var disid = $(this).val();
+        var ur = "{% url 'Guest:Ajaxplace' %}";
+        $.ajax({
+            url: ur,
+            data: { disid: disid },
+            success: function (data) {
+                $("#sel_place").html(data);
+            },
+        });
+    });
+     $("#sel_place").change(function () {
+        var placeid = $(this).val();
+        var ur = "{% url 'User:Ajaxturf' %}";
+        $.ajax({
+            url: ur,
+            data: { placeid: placeid },
+            success: function (data) {
+                $("#result").html(data);
+            },
+        });
+    });
+</script>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form name="formreg" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table border="1">
+
+        <tr>
+            <td>Owner Name</td>
+            <td><input type="text" name="txt_ownername" required></td>
+        </tr>
+
+        <tr>
+            <td>Email</td>
+            <td><input type="email" name="txt_email" required></td>
+        </tr>
+
+        <tr>
+            <td>Phone</td>
+            <td><input type="text" name="txt_phone" required></td>
+        </tr>
+
+        <tr>
+            <td>Address</td>
+            <td><input type="text" name="txt_address" required></td>
+        </tr>
+
+        <tr>
+            <td>District</td>
+            <td>
+                <select name="sel_district" id="sel_district" required>
+                    <option value="">--select--</option>
+                    {% for i in districtData %}
+                    <option value="{{i.id}}">
+                        {{i.district_name}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Place</td>
+            <td>
+                <select name="sel_place" id="sel_place" required>
+                    <option value="">--select--</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Photo</td>
+            <td><input type="file" name="txt_photo" required></td>
+        </tr>
+
+        <tr>
+            <td>ID Proof</td>
+            <td><input type="file" name="txt_proof" required></td>
+        </tr>
+
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="txt_password" required></td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="btn_reg" value="REGISTER">
+            </td>
+        </tr>
+
+    </table>
+</form>
+</body>
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("#sel_district").change(function () {
+        var disid = $(this).val();
+        var ur = "{% url 'Guest:Ajaxplace' %}";
+        $.ajax({
+            url: ur,
+            data: { disid: disid },
+            success: function (data) {
+                $("#sel_place").html(data);
+            },
+        });
+    });
+</script>

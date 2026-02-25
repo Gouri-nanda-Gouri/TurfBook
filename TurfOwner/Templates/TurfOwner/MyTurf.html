@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Turfs</title>
+</head>
+<body>
+
+<h2>My Turf List</h2>
+
+<table border="1">
+
+<tr>
+    <th>Image</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Capacity</th>
+    <th>Contact</th>
+    <th>Place</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+
+{% for i in turfdata %}
+<tr>
+
+    <td>
+        <img src="{{i.turf_image.url}}" width="80">
+    </td>
+
+    <td>{{i.turf_name}}</td>
+
+    <td>{{i.turf_description}}</td>
+
+    <td>{{i.turf_capacity}}</td>
+
+
+    <td>{{i.turf_contact_number}}</td>
+
+    <td>{{i.place.place_name}}</td>
+
+    <td>
+        {% if i.turf_status == 0 %}
+            Pending
+        {% elif i.turf_status == 1 %}
+            Approved
+        {% elif i.turf_status == 2 %}
+            Rejected
+        {% endif %}
+    </td>
+
+    <td>
+      
+
+        <!-- 1️⃣ Add Gallery -->
+        <a href="{% url 'TurfOwner:AddGallery' i.id %}">Add Gallery</a> <br>
+
+        <!-- 2️⃣ Add Sports -->
+        <a href="{% url 'TurfOwner:AddTurfSports' i.id %}">Add Sports</a> <br>
+
+        <!-- 3️⃣ Add Slot -->
+        <a href="{% url 'TurfOwner:AddSlot' i.id %}">Add Slot</a> <br>
+
+        <!-- Delete -->
+        <a href="{% url 'TurfOwner:DeleteTurf' i.id %}">Delete</a>
+
+    </td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="{% url 'TurfOwner:AddTurf' %}">Add New Turf</a>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Slot</title>
+</head>
+<body>
+
+<h2>Add Slot</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <td>Slot Time</td>
+    <td>
+        <input type="text" name="txt_time" placeholder="Example: 6AM - 7AM" required>
+    </td>
+</tr>
+
+<tr>
+    <td>Amount</td>
+    <td>
+        <input type="text" name="txt_amount" required>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2" align="center">
+        <input type="submit" value="Add Slot">
+    </td>
+</tr>
+
+</table>
+
+</form>
+
+<br><br>
+
+<h3>Existing Slots</h3>
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Sl No</th>
+    <th>Slot Time</th>
+    <th>Amount</th>
+</tr>
+
+{% for i in slots %}
+<tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{i.slot_time}}</td>
+    <td>{{i.slot_amount}}</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="3" align="center">No slots added yet</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
+{% if msg %}
+<script>
+alert("{{msg}}");
+window.location="{% url 'TurfOwner:AddSlot' tid %}"
+</script>
+{% endif %}
