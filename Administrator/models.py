@@ -19,7 +19,7 @@ class tbl_place(models.Model):
 
 class tbl_sports(models.Model):
     sports_name=models.CharField(max_length=30)
-  
+    required_players = models.IntegerField(default=1)   
 
     
 

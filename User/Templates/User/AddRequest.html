@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Request</title>
+</head>
+<body>
+    <h2>Request Additional Players</h2>
+
+<p>
+Turf: {{ booking.slot.turf.turf_name }} <br>
+Sport: {{ booking.sport.sports_name }}
+Date: {{ booking.slot.date }} <br>
+Time: {{ booking.slot.slot_time }}
+</p>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Players Needed</label><br>
+    <input type="number" name="players" required><br><br>
+
+    <label>Description</label><br>
+    <textarea name="description" required></textarea><br><br>
+
+    <button type="submit">Post Request</button>
+</form>
+</body>
+</html>

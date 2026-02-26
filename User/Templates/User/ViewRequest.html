@@ -1,0 +1,28 @@
+<h2>Player Requests</h2>
+
+{% for r in requests %}
+
+<p>
+<strong>Turf:</strong> {{ r.slot.turf.turf_name }} <br>
+<strong>Sport:</strong> {{ r.sport.sports_name }} <br>
+<strong>Date:</strong> {{ r.slot.date }} <br>
+<strong>Time:</strong> {{ r.slot.slot_time }} <br>
+
+<strong>Players Needed:</strong> {{ r.request_players }} <br>
+<strong>Joined:</strong> {{ r.joined_players }} <br>
+
+<strong>Description:</strong> {{ r.request_description }} <br>
+
+{% if r.request_status == 0 %}
+    <a href="{% url 'User:JoinRequest' r.id %}">
+        <button>JOIN</button>
+    </a>
+{% else %}
+    <b>Request Closed</b>
+{% endif %}
+
+</p>
+
+<hr>
+
+{% endfor %}

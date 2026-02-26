@@ -43,6 +43,10 @@ urlpatterns = [
      path('deleteSports/<int:sid>/',views.DeleteSports,name="DeleteSports"),
      path('updateSports/<int:uid>/',views.UpdateSports,name="UpdateSports"),
 
+     path('ViewRequests/',views.ViewRequests,name="ViewRequests"),
+
+     path('ViewBookings/',views.ViewBookings,name="ViewBookings"),
+
 
 
 ]

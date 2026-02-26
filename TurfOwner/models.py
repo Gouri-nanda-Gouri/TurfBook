@@ -29,3 +29,6 @@ class tbl_slot(models.Model):
     slot_amount=models.DecimalField(max_digits=6,decimal_places=2)
 
 
+
+
+

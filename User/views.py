@@ -129,88 +129,74 @@ def Ajaxturf(request):
 
 
 
+from datetime import date
+from decimal import Decimal
+from datetime import date
+from decimal import Decimal
 
 def ConfirmBooking(request, sid):
     slot = tbl_slot.objects.get(id=sid)
     user = tbl_user.objects.get(id=request.session['uid'])
+    sports = tbl_sports.objects.all()
 
     if request.method == "POST":
 
         play_date = request.POST.get('txt_date')
-        players = request.POST.get('txt_players')
+        sport_id = request.POST.get('sel_sport')
 
-        # Empty checks
+        # validations
         if not play_date:
             return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,
-                'today':date.today(),
+                'slot':slot,'sports':sports,'today':date.today(),
                 'msg':'Please select play date'
             })
 
-        if not players:
+        if not sport_id:
             return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,
-                'today':date.today(),
-                'msg':'Please enter number of players'
+                'slot':slot,'sports':sports,'today':date.today(),
+                'msg':'Please select sport'
             })
 
-        players = int(players)
-
-        if players <= 0:
-            return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,
-                'today':date.today(),
-                'msg':'Invalid player count'
-            })
-
-        # Convert to date object
         play_date_obj = date.fromisoformat(play_date)
 
-        # Past date validation
         if play_date_obj < date.today():
             return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,
-                'today':date.today(),
+                'slot':slot,'sports':sports,'today':date.today(),
                 'msg':'Cannot book past date'
             })
 
-        # Capacity validation
-        if players > slot.turf.turf_capacity:
-            return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,
-                'today':date.today(),
-                'msg':'Player count exceeds turf capacity'
-            })
-
-        # Double booking validation
+        # prevent duplicate booking
         if tbl_booking.objects.filter(
             slot=slot,
             booking_todate=play_date_obj
         ).exists():
             return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,
-                'today':date.today(),
+                'slot':slot,'sports':sports,'today':date.today(),
                 'msg':'This slot is already booked for the selected date'
             })
 
-        # Calculate total amount (per person pricing)
-        total_amount = slot.slot_amount * players
+        sport = tbl_sports.objects.get(id=sport_id)
 
-        # Save booking
+        # slot amount = total amount
+        total_amount = slot.slot_amount
+
+        # save booking
         tbl_booking.objects.create(
             user=user,
             slot=slot,
+            sport=sport,
             booking_todate=play_date_obj,
-            booking_players=players,
+            total_amount=total_amount,
+            booking_amount=total_amount
         )
 
-        # Success message
         request.session['booking_msg'] = "Booking successful!"
 
         return redirect("User:MyBookings")
 
     return render(request,"User/ConfirmBooking.html",{
         'slot':slot,
+        'sports':sports,
         'today':date.today()
     })
 
@@ -235,7 +221,7 @@ def CancelBooking(request,bid):
     request.session['booking_msg'] = "Booking cancelled successfully"
 
     return redirect("User:MyBookings")
-
+from django.db.models import Sum
 from decimal import Decimal
 
 def payment(request,bid):
@@ -244,22 +230,18 @@ def payment(request,bid):
 
     booking = tbl_booking.objects.get(id=bid)
 
-    # already paid
     if booking.booking_status == 4:
         return render(request,"User/Payment.html",{
             "msg":"Payment already completed"
         })
 
-    # calculate total from players × slot amount
-    total_amount = booking.booking_players * booking.slot.slot_amount
-
-    # calculate 30% advance
-    advance_amount = total_amount * Decimal('0.30')
+    # calculate using required players
+    total_amount = booking.slot.slot_amount * booking.sport.required_players
 
     if request.method == "POST":
 
-        # store only advance in booking_amount
-        booking.booking_amount = advance_amount
+        booking.booking_amount = total_amount
+        booking.total_amount = total_amount
         booking.booking_status = 4
         booking.save()
 
@@ -267,7 +249,6 @@ def payment(request,bid):
 
     return render(request,"User/Payment.html",{
         "booking":booking,
-        "advance_amount":advance_amount,
         "total_amount":total_amount
     })
 
@@ -280,3 +261,52 @@ def paymentsuc(request):
     if 'uid' not in request.session:
         return redirect('Guest:login')
     return render(request,"User/Paymentsuc.html")
+
+def AddRequest(request, bid):
+    booking = tbl_booking.objects.get(id=bid)
+
+    if request.method == "POST":
+        players = request.POST.get("players")
+        description = request.POST.get("description")
+
+        tbl_request.objects.create(
+            booking=booking,
+            user=tbl_user.objects.get(id=request.session['uid']),
+            slot=booking.slot,
+            sport=booking.sport,
+            request_players=players,
+            request_description=description,
+        )
+        return redirect("User:ViewRequest")
+
+    return render(request, "User/AddRequest.html", {"booking": booking})
+
+def ViewRequest(request):
+    requests = tbl_request.objects.all().order_by('-created_date')
+    return render(request, "User/ViewRequest.html", {"requests": requests})
+
+
+def JoinRequest(request, rid):
+    req = tbl_request.objects.get(id=rid)
+    user = tbl_user.objects.get(id=request.session['uid'])
+
+    # prevent duplicate join
+    if tbl_request_join.objects.filter(request=req, user=user).exists():
+        return redirect("User:ViewRequest")
+
+    # increase joined count
+    req.joined_players += 1
+
+    # close if full
+    if req.joined_players >= req.request_players:
+        req.request_status = 1
+
+    req.save()
+
+    # store join record
+    tbl_request_join.objects.create(
+        request=req,
+        user=user
+    )
+
+    return redirect("User:ViewRequest")

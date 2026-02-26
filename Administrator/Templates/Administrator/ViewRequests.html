@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player Requests - Admin</title>
+</head>
+<body>
+
+<h2>All Player Requests</h2>
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Sl No</th>
+    <th>User</th>
+    <th>Turf</th>
+    <th>Sport</th>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Players Needed</th>
+    <th>Joined Players</th>
+    <th>Description</th>
+    <th>Status</th>
+</tr>
+
+{% for r in requests %}
+<tr>
+
+    <td>{{ forloop.counter }}</td>
+
+    <td>{{ r.user.user_name }}</td>
+
+    <td>{{ r.slot.turf.turf_name }}</td>
+
+    <td>{{ r.sport.sports_name }}</td>
+
+    <td>{{ r.slot.date }}</td>
+
+    <td>{{ r.slot.slot_time }}</td>
+
+    <td>{{ r.request_players }}</td>
+
+    <td>{{ r.joined_players }}</td>
+
+    <td>{{ r.request_description }}</td>
+
+    <td>
+        {% if r.request_status == 0 %}
+            Open
+        {% else %}
+            Closed
+        {% endif %}
+    </td>
+
+</tr>
+{% empty %}
+<tr>
+    <td colspan="10" align="center">No Requests Found</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -1,28 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Administrator Home</title>
 </head>
 
 <body>
-      Administrator Home Page
-    <br>
-    <br>
-    <a href="{% url 'Administrator:District' %}">District</a>
-    <br>
-    <br>
-    <a href="{% url 'Administrator:Place' %}">place</a>
-    <br>
-    <br>
-    <a href="{% url 'Administrator:TurfList' %}">Turf List</a>
-     <br>
-     <br>
-    <a href="{% url 'Administrator:UserList' %}">User List</a>
-    <br>
-    <br>
-</body>
 
+<h2>Administrator Home Page</h2>
+
+<br>
+
+<h3>Location Management</h3>
+
+<a href="{% url 'Administrator:District' %}">District</a>
+<br><br>
+
+<a href="{% url 'Administrator:Place' %}">Place</a>
+<br><br>
+
+<h3>Category & Sports</h3>
+
+<a href="{% url 'Administrator:Category' %}">Category</a>
+<br><br>
+
+<a href="{% url 'Administrator:Sports' %}">Sports</a>
+<br><br>
+
+<h3>User Management</h3>
+
+<a href="{% url 'Administrator:UserList' %}">User List</a>
+<br><br>
+
+<a href="{% url 'Administrator:OwnerVerification' %}">Owner Verification</a>
+<br><br>
+
+<h3>Turf Management</h3>
+
+<a href="{% url 'Administrator:TurfVerification' %}">Turf Verification</a>
+<br><br>
+
+
+<h3>Booking & Requests</h3>
+
+<a href="{% url 'Administrator:ViewBookings' %}">View All Bookings</a>
+<br><br>
+
+<a href="{% url 'Administrator:ViewRequests' %}">View Player Requests</a>
+<br><br>
+
+<h3>Admin Controls</h3>
+
+<a href="{% url 'Administrator:AdminRegistration' %}">Admin Registration</a>
+<br><br>
+
+</body>
 </html>

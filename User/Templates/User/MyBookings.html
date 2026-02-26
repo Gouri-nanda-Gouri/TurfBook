@@ -16,6 +16,7 @@
             <th>Sl No</th>
             <th>Turf</th>
             <th>Slot Time</th>
+            <th>Sport</th>
             <th>Booked On</th>
             <th>Play Date</th>
             <th>Status</th>
@@ -29,6 +30,8 @@
             <td>{{i.slot.turf.turf_name}}</td>
 
             <td>{{i.slot.slot_time}}</td>
+            <td>{{i.sport.sports_name}}</td>
+
 
             <td>{{i.booking_date}}</td>
 
@@ -42,18 +45,32 @@
                 Confirmed
                 {% elif i.booking_status == 2 %}
                 Cancelled
+                {% elif i.booking_status == 3 %} Rejected
+                {% elif i.booking_status == 4 %} Booking Completed
+
                 {% endif %}
             </td>
 
-            <td>
-                {% if i.booking_status == 0 %}
-                <a href="{% url 'User:CancelBooking' i.id %}">Cancel</a>
-                {% elif i.booking_status == 1 %} Approved
-                <a href="{% url 'User:payment' i.id %}">Pay Now</a>
-                {% elif i.booking_status == 2 %} Cancelled
-                {% elif i.booking_status == 3 %} Rejected
-                {% endif %}
-            </td>
+           <td>
+    {% if i.booking_status == 0 %}
+        <a href="{% url 'User:CancelBooking' i.id %}">Cancel</a>
+
+    {% elif i.booking_status == 1 %}
+        Approved
+        <a href="{% url 'User:payment' i.id %}">Pay Now</a>
+
+    {% elif i.booking_status == 2 %}
+        Cancelled
+
+    {% elif i.booking_status == 3 %}
+        Rejected
+
+    {% elif i.booking_status == 4 %}
+        Booking Completed
+        <br>
+        <a href="{% url 'User:AddRequest' i.id %}">Request Players</a>
+    {% endif %}
+</td>
 
         </tr>
         {% empty %}

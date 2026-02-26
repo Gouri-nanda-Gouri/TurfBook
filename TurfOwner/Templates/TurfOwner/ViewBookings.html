@@ -16,6 +16,7 @@
             <th>User</th>
             <th>Turf</th>
             <th>Slot</th>
+            <th>Sport</th>
             <th>Play Date</th>
             <th>Status</th>
             <th>Action</th>
@@ -31,6 +32,7 @@
             <td>{{i.slot.turf.turf_name}}</td>
 
             <td>{{i.slot.slot_time}}</td>
+            <td>{{i.sport.sports_name}}</td>
 
             <td>{{i.booking_todate}}</td>
 
@@ -44,6 +46,8 @@
                 Cancelled
                 {% elif i.booking_status == 3 %}
                 Rejected
+                {% elif i.booking_status == 4 %}
+                Completed
                 {% endif %}
             </td>
 
@@ -58,6 +62,8 @@
                 Cancelled
                 {% elif i.booking_status == 3 %}
                 Rejected
+                {% elif i.booking_status == 4 %}
+                Completed
               
                 {% endif %}
 

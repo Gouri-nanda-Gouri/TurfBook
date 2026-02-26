@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from Administrator.models import *
 from Guest.models import *
 from TurfOwner.models import *
+from User.models import *
 
 # Create your views here.
 
@@ -191,7 +192,8 @@ def Sports(request):
     sports=tbl_sports.objects.all()
     if request.method=="POST":
         sportName=request.POST.get('txt_sport')
-        tbl_sports.objects.create(sports_name=sportName)
+        required_players = request.POST.get('txt_players')
+        tbl_sports.objects.create(sports_name=sportName, required_players=required_players)
         return render(request,"Administrator/Sports.html",{'sports':sports,'msg':"Sport Added Successfully"})
     return render(request,"Administrator/Sports.html",{'sports':sports})
 
@@ -203,8 +205,19 @@ def UpdateSports(request,uid):
     sportsOne=tbl_sports.objects.get(id=uid)
     if request.method=="POST":
         sportsOne.sports_name=request.POST.get("txt_sport")
+        sportsOne.required_players = request.POST.get("txt_players")
         sportsOne.save()
         return render(request,"Administrator/Sports.html",{'msg':"Sport Updated Successfully"})
 
     else:
         return render(request,"Administrator/Sports.html",{"sportsOne":sportsOne})
+    
+
+def ViewRequests(request):
+    requests = tbl_request.objects.all().order_by('-created_date')
+    return render(request, "Administrator/ViewRequests.html", {"requests": requests})
+
+
+def ViewBookings(request):
+    bookings = tbl_booking.objects.all().order_by('-booking_date')
+    return render(request, "Administrator/ViewBookings.html", {"bookings": bookings})
