@@ -1,0 +1,103 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Soccer &mdash; Website by Colorlib</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'Main/fonts/icomoon/style.css' %}">
+
+  <link rel="stylesheet" href="{% static 'Main/css/bootstrap/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'Main/css/jquery-ui.css' %}">
+  <link rel="stylesheet" href="{% static 'Main/css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'Main/css/owl.theme.default.min.css' %}">
+  <link rel="stylesheet" href="{% static 'Main/css/jquery.fancybox.min.css' %}">
+  <link rel="stylesheet" href="{% static 'Main/css/bootstrap-datepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'Main/fonts/flaticon/font/flaticon.css' %}">
+  <link rel="stylesheet" href="{% static 'Main/css/aos.css' %}">
+
+  <link rel="stylesheet" href="{% static 'Main/css/style.css' %}">
+
+
+</head>
+
+<body>
+
+  <div class="site-wrap">
+
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+
+    <header class="site-navbar py-4" role="banner">
+
+      <div class="container">
+        <div class="d-flex align-items-center">
+          <div class="site-logo">
+            <a href="index.html">
+              <img src="{% static 'Main/images/logo.png' %}" alt="Logo">
+            </a>
+          </div>
+          <div class="ml-auto">
+            <nav class="site-navigation position-relative text-right" role="navigation">
+              <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+                <li class="active"><a href="{% url 'Guest:index' %}" class="nav-link">Home</a></li>
+                <li><a href="{% url 'Guest:UserRegistration' %}" class="nav-link">User Registration</a></li>
+                <li><a href="{% url 'Guest:OwnerRegistration' %}" class="nav-link">Owner Registration</a></li>
+                <li><a href="{% url 'Guest:Login' %}" class="nav-link">Login</a></li>
+                <li><a href="{% url 'Guest:Contact' %}" class="nav-link">Contact</a></li>
+              </ul>
+            </nav>
+
+            <a href="#" class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right text-white"><span
+                class="icon-menu h3 text-white"></span></a>
+          </div>
+        </div>
+      </div>
+
+    </header>
+       <div class="site-logo">
+            <a href="index.html">
+              <img src="{% static 'Main/images/logo.png' %}" alt="Logo">
+            </a>
+          </div>
+    {% block content %}
+    {% endblock %}
+
+
+    
+
+
+    <footer class="footer-section">
+      
+
+        <div class="row text-center">
+          <div class="col-md-12">
+            <div class=" pt-5">
+              <p>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;
+                <script>
+                  document.write(new Date().getFullYear());
+                </script> All rights reserved | This template is made with <i class="icon-heart"
+                  aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </footer>

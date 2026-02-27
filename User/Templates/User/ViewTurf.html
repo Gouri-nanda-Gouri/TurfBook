@@ -1,72 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>View Truf</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
+
 <body>
-     <tr>
-                <td>District</td>
-                <td>
+    <tr>
+        <td>District</td>   
+        <td>
 
-                    <select name="sel_district" id="sel_district">
-                        <option value="">--select--</option>
-                        {% for i in district %}
-                        <option value="{{i.id}}">
-                            {{i.district_name}}</option>
-                        {% endfor %}
+            <select name="sel_district" id="sel_district">
+                <option value="">--select--</option>
+                {% for i in district %}
+                <option value="{{i.id}}">
+                    {{i.district_name}}</option>
+                {% endfor %}
 
-                    </select>
-                </td>
-            </tr>
+            </select>
+        </td>
+    </tr>
 
-            <tr>
-                <td>Place</td>
-                <td>
+    <tr>
+        <td>Place</td>
+        <td>
 
-                    <select name="sel_place" id="sel_place">
-                        <option value="">--select--</option>
-                    </select>
-                </td>
-            </tr>
+            <select name="sel_place" id="sel_place">
+                <option value="">--select--</option>
+            </select>
+        </td>
+    </tr>
 
     <table border="1" id="result">
-<tr>
-    <th>Sl No</th>
-    <th>Turf Name</th>
-    <th>Description</th>
-    <th>Contact</th>
-    <th>Capacity</th>
-    <th>Place</th>
-    <th>Image</th>
-    <th>Action</th>
-</tr>
+        <tr>
+            <th>Sl No</th>
+            <th>Turf Name</th>
+            <th>Description</th>
+            <th>Contact</th>
+            <th>Capacity</th>
+            <th>Rating</th>
+            <th>Place</th>
+            <th>Image</th>
+            <th>Action</th>
+        </tr>
 
-{% for i in turfs %}
-<tr>
-    <td>{{forloop.counter}}</td>
-    <td>{{i.turf_name}}</td>
-    <td>{{i.turf_description}}</td>
-    <td>{{i.turf_contact_number}}</td>
-    <td>{{i.turf_capacity}}</td>
-    <td>{{i.place.place_name}}</td>
-    <td>
-        <img src="{{i.turf_image.url}}" width="60">
-    </td>
-    <td>
-        <a href="{% url 'User:ViewSlot' i.id %}">
-            View Slot
-        </a>
-    </td>
-</tr>
-{% empty %}
-<tr>
-    <td colspan="8" align="center">No turfs available</td>
-</tr>
-{% endfor %}
-</table>
+        {% for  i,j in turfs %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.turf_name}}</td>
+            <td>{{i.turf_description}}</td>
+            <td>{{i.turf_contact_number}}</td>
+            <td>{{i.turf_capacity}}</td>
+           <td>
+    {% for k in ar %}
+        {% if k <= j %}
+            <i class="fa-solid fa-star" style="color:gold;"></i>
+        {% else %}
+            <i class="fa-solid fa-star" style="color:lightgray;"></i>
+        {% endif %}
+    {% endfor %}
+</td>
+            <td>{{i.place.place_name}}</td>
+            <td>
+                <img src="{{i.turf_image.url}}" width="60">
+            </td>
+            <td>
+                <a href="{% url 'User:ViewSlot' i.id %}">
+                    View Slot
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="8" align="center">No turfs available</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
+
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
@@ -81,7 +96,7 @@
             },
         });
     });
-     $("#sel_place").change(function () {
+    $("#sel_place").change(function () {
         var placeid = $(this).val();
         var ur = "{% url 'User:Ajaxturf' %}";
         $.ajax({

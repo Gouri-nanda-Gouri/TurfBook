@@ -221,3 +221,23 @@ def ViewRequests(request):
 def ViewBookings(request):
     bookings = tbl_booking.objects.all().order_by('-booking_date')
     return render(request, "Administrator/ViewBookings.html", {"bookings": bookings})
+
+
+def ViewComplaints(request):
+    complaints = tbl_complaint.objects.all().order_by('-id')
+    return render(request, "Administrator/ViewComplaints.html", {"complaints": complaints})
+
+
+def ViewFeedbacks(request):
+    feedback=tbl_feedback.objects.all().order_by('-id')
+    return render(request,"Administrator/Feedback.html",{"feedback":feedback})
+
+def reply(request,rid):
+    complaint=tbl_complaint.objects.get(id=rid)
+    if request.method=="POST":
+        complaint.complaint_reply=request.POST.get("txt_reply")
+        complaint.complaint_status=1
+        complaint.save()
+        return redirect("Administrator:ViewComplaints")
+    else:
+        return render(request,"Administrator/Reply.html",{"complaint":complaint})

@@ -51,26 +51,28 @@
                 {% endif %}
             </td>
 
-           <td>
-    {% if i.booking_status == 0 %}
-        <a href="{% url 'User:CancelBooking' i.id %}">Cancel</a>
+            <td>
+                {% if i.booking_status == 0 %}
+                <a href="{% url 'User:CancelBooking' i.id %}">Cancel</a>
 
-    {% elif i.booking_status == 1 %}
-        Approved
-        <a href="{% url 'User:payment' i.id %}">Pay Now</a>
+                {% elif i.booking_status == 1 %}
+                Approved
+                <a href="{% url 'User:payment' i.id %}">Pay Now</a>
 
-    {% elif i.booking_status == 2 %}
-        Cancelled
+                {% elif i.booking_status == 2 %}
+                Cancelled
 
-    {% elif i.booking_status == 3 %}
-        Rejected
+                {% elif i.booking_status == 3 %}
+                Rejected
 
-    {% elif i.booking_status == 4 %}
-        Booking Completed
-        <br>
-        <a href="{% url 'User:AddRequest' i.id %}">Request Players</a>
-    {% endif %}
-</td>
+                {% elif i.booking_status == 4 %}
+                Booking Completed
+                <br>
+                <a href="{% url 'User:AddRequest' i.id %}">Request Players</a>
+                <br>
+                <a href="{% url 'User:rating' i.slot.turf.id %}">Rate</a>
+                {% endif %}
+            </td>
 
         </tr>
         {% empty %}

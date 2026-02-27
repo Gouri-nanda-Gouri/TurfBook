@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>SlNo</td>
+            <td>User</td>
+            <td>Content</td>
+        </tr>
+        {% for i in feedbacks %}
+         <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ i.user.username }}</td>
+            <td>{{ i.feedback_content }}</td>
+
+        </tr>
+    </table>
+</body>
+</html>

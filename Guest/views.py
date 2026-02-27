@@ -106,4 +106,9 @@ def owner_registration(request):
         return render(request, "Guest/OwnerRegistration.html", {"msg": "Registration Successful"})
     
     return render(request, "Guest/OwnerRegistration.html",{'districtData': districtData})
+
+
+
+def Contact(request):
+    return render(request, "Guest/Contact.html")
                 

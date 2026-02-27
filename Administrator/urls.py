@@ -47,6 +47,11 @@ urlpatterns = [
 
      path('ViewBookings/',views.ViewBookings,name="ViewBookings"),
 
+     path('ViewFeedbacks/',views.ViewFeedbacks,name="ViewFeedbacks"),
 
+     path('ViewComplaints/',views.ViewComplaints,name="ViewComplaints"),
+     path('Reply/<int:rid>/',views.reply,name="Reply"),
+
+     
 
 ]

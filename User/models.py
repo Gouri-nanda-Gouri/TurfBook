@@ -49,3 +49,26 @@ class tbl_request_join(models.Model):
     request = models.ForeignKey(tbl_request, on_delete=models.CASCADE)
     user = models.ForeignKey(tbl_user, on_delete=models.CASCADE)
     joined_date = models.DateField(auto_now_add=True)
+
+
+class tbl_rating(models.Model):
+    rating_data=models.IntegerField()
+    user=models.ForeignKey(tbl_user,on_delete=models.CASCADE)
+    user_review=models.CharField(max_length=500)
+    truf=models.ForeignKey(tbl_turf,on_delete=models.CASCADE)
+    datetime=models.DateTimeField(auto_now_add=True)
+
+
+class tbl_complaint(models.Model):
+    user=models.ForeignKey(tbl_user,on_delete=models.CASCADE)
+    complaint_title=models.CharField(max_length=100)
+    complaint_content=models.CharField(max_length=500)
+    complaint_status=models.IntegerField(default=0) 
+    complaint_date=models.DateTimeField(auto_now_add=True)
+    complaint_reply=models.CharField(max_length=500,null=True)
+
+
+class tbl_feedback(models.Model):
+    user=models.ForeignKey(tbl_user,on_delete=models.CASCADE)
+    feedback_content=models.CharField(max_length=500)
+    feedback_date=models.DateTimeField(auto_now_add=True)

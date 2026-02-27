@@ -13,5 +13,6 @@ urlpatterns = [
      path('Login/',views.Login, name="Login"),
       
      path('OwnerRegistration/',views.owner_registration, name="OwnerRegistration"),
+     path('Contact/',views.Contact, name="Contact"),
 
 ]

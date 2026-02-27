@@ -9,23 +9,29 @@
     <th>Image</th>
     <th>Action</th>
 </tr>
-
-{% for i in data %}
+{% for i,j in data %}
 <tr>
     <td>{{forloop.counter}}</td>
     <td>{{i.turf_name}}</td>
     <td>{{i.turf_description}}</td>
     <td>{{i.turf_contact_number}}</td>
     <td>{{i.turf_capacity}}</td>
+
+    <td>
+    {% for k in ar %}
+        {% if k <= j %}
+            <i class="fa-solid fa-star" style="color:gold;"></i>
+        {% else %}
+            <i class="fa-solid fa-star" style="color:lightgray;"></i>
+        {% endif %}
+    {% endfor %}
+</td>
+
     <td>{{i.place.place_name}}</td>
     <td><img src="{{i.turf_image.url}}" width="60"></td>
     <td>
         <a href="{% url 'User:ViewSlot' i.id %}">View Slot</a>
     </td>
-</tr>
-{% empty %}
-<tr>
-    <td colspan="8" align="center">No turfs available</td>
 </tr>
 {% endfor %}
         </table>

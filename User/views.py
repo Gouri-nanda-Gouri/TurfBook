@@ -3,6 +3,7 @@ from Guest.models import *
 from TurfOwner.models import *
 from User.models import *
 from datetime import date
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -48,11 +49,34 @@ def ChangePassword(request):
 
 
 
-
 def ViewTurf(request):
-    district=tbl_district.objects.all() 
-    trufData=tbl_turf.objects.filter(turf_status=1)
-    return render(request,"User/ViewTurf.html",{'district':district,'turfs':trufData})
+    ar=[1,2,3,4,5]
+    parry=[]
+    avg=0
+
+    district = tbl_district.objects.all()   # FIX 1
+
+    Us=tbl_turf.objects.filter(turf_status=1)  # FIX 2
+
+    for i in Us:
+        tot=0
+        ratecount=tbl_rating.objects.filter(truf=i.id).count()
+        if ratecount>0:
+            ratedata=tbl_rating.objects.filter(truf=i.id)
+            for j in ratedata:
+                tot=tot+j.rating_data
+                avg=tot//ratecount
+            parry.append(avg)
+        else:
+            parry.append(0)
+
+    datas=zip(Us,parry)
+
+    return render(request,'User/ViewTurf.html',{
+        "turfs":datas,
+        "ar":ar,
+        "district":district   # FIX 1
+    })
 
 def ViewSlot(request,tid):
     turf = tbl_turf.objects.get(id=tid, turf_status=1)
@@ -65,11 +89,35 @@ def ViewSlot(request,tid):
 
 
 def Ajaxturf(request):
+    ar=[1,2,3,4,5]
+    parry=[]
+    avg=0
+
     placeid = request.GET.get('placeid')
+
     turf = tbl_turf.objects.filter(
         place=placeid,
         turf_status=1
     )
+
+    for i in turf:
+        tot=0
+        ratecount=tbl_rating.objects.filter(truf=i.id).count()
+        if ratecount>0:
+            ratedata=tbl_rating.objects.filter(truf=i.id)
+            for j in ratedata:
+                tot=tot+j.rating_data
+                avg=tot//ratecount
+            parry.append(avg)
+        else:
+            parry.append(0)
+
+    datas=zip(turf,parry)
+
+    return render(request,"User/Ajaxturf.html",{
+        'data':datas,
+        'ar':ar
+    })
 
     return render(request,"User/Ajaxturf.html",{'data':turf})
 
@@ -310,3 +358,81 @@ def JoinRequest(request, rid):
     )
 
     return redirect("User:ViewRequest")
+
+
+
+def rating(request,mid):
+    parray=[1,2,3,4,5]
+    mid=mid
+    # wdata=tbl_booking.objects.get(id=mid)
+    
+    counts=0
+    counts=stardata=tbl_rating.objects.filter(truf=mid).count()
+    if counts>0:
+        res=0
+        stardata=tbl_rating.objects.filter(truf=mid).order_by('-datetime')
+        for i in stardata:
+            res=res+i.rating_data
+        avg=res//counts
+        # print(avg)
+        return render(request,"User/Rating.html",{'mid':mid,'data':stardata,'ar':parray,'avg':avg,'count':counts})
+    else:
+         return render(request,"User/Rating.html",{'mid':mid})
+
+def ajaxstar(request):
+    parray=[1,2,3,4,5]
+    rating_data=request.GET.get('rating_data')
+    user_review=request.GET.get('user_review')
+    pid=request.GET.get('pid')
+    # wdata=tbl_booking.objects.get(id=pid)
+    tbl_rating.objects.create(user=tbl_user.objects.get(id=request.session["uid"]),user_review=user_review,rating_data=rating_data,truf=tbl_turf.objects.get(id=pid))
+    stardata=tbl_rating.objects.filter(truf=pid).order_by('-datetime')
+    return render(request,"User/AjaxRating.html",{'data':stardata,'ar':parray})
+
+def starrating(request):
+    r_len = 0
+    five = four = three = two = one = 0
+    # cdata = tbl_booking.objects.get(id=request.GET.get("pdt"))
+    rate = tbl_rating.objects.filter(truf=request.GET.get("pdt"))
+    ratecount = tbl_rating.objects.filter(truf=request.GET.get("pdt")).count()
+    for i in rate:
+        if int(i.rating_data) == 5:
+            five = five + 1
+        elif int(i.rating_data) == 4:
+            four = four + 1
+        elif int(i.rating_data) == 3:
+            three = three + 1
+        elif int(i.rating_data) == 2:
+            two = two + 1
+        elif int(i.rating_data) == 1:
+            one = one + 1
+        else:
+            five = four = three = two = one = 0
+        # print(i.rating_data)
+        # r_len = r_len + int(i.rating_data)
+    # rlen = r_len // 5
+    # print(rlen)
+    result = {"five":five,"four":four,"three":three,"two":two,"one":one,"total_review":ratecount}
+    return JsonResponse(result)
+
+
+
+def Complaint(request):
+    user=tbl_user.objects.get(id=request.session['uid'])
+    if request.method=="POST":
+        title=request.POST.get('txt_title')
+        content=request.POST.get('txt_content')
+        tbl_complaint.objects.create(user=user,complaint_title=title,complaint_content=content)
+        return render(request,"User/Complaint.html",{'msg':'Complaint submitted successfully'})
+    else:
+        return render(request,"User/Complaint.html")
+    
+
+def Feedback(request):
+    user=tbl_user.objects.get(id=request.session['uid'])
+    if request.method=="POST":
+        content=request.POST.get('txt_content')
+        tbl_feedback.objects.create(user=user,feedback_content=content)
+        return render(request,"User/Feedback.html",{'msg':'Feedback submitted successfully'})
+    else:
+        return render(request,"User/Feedback.html")

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Complaints</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>SlNo</td>
+            <td>User Name</td>
+            <td>Title</td>
+            <td>Content</td>
+            <td>Date</td>
+            <td>Actions</td>
+        </tr>
+        {% for i in complaints %}
+         <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ i.user.username }}</td>
+            <td>{{ i.complaint_title }}</td>
+            <td>{{ i.complaint_content }}</td>
+            <td>{{ i.complaint_date }}</td>
+            <td><a href="{% url 'Administrator:Reply' i.id %}">Reply</a></td>
+
+        </tr>
+    </table>
+</body>
+</html>

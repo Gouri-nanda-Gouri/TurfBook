@@ -28,4 +28,9 @@ urlpatterns = [
     path('ViewRequest/',views.ViewRequest,name="ViewRequest"),
 
     path('JoinRequest/<int:rid>', views.JoinRequest, name="JoinRequest"),
+
+    path('rating/<int:mid>',views.rating,name="rating"),
+    path('ajaxstar/',views.ajaxstar,name="ajaxstar"),
+    path('starrating/',views.starrating,name="starrating"),
+
 ]
