@@ -7,6 +7,9 @@ from User.models import *
 # Create your views here.
 
 def District(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     data=tbl_district.objects.all()
     if request.method=="POST":
         name=request.POST.get('txt_Dis')
@@ -33,6 +36,9 @@ def UpdateDistrict(request,did):
         
 
 def AdminRegistration(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     data=tbl_admin.objects.all()
     if request.method=="POST":
         name=request.POST.get('txt_name')
@@ -59,6 +65,9 @@ def UpdateAdminRegistration(request,aid):
         return render(request,"Administrator/AdminRegistration.html",{"AdminRegistrationOne":AdminRegistrationOne})  
     
 def Category(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     data=tbl_category.objects.all()
     if request.method=="POST":
         name=request.POST.get('txt_cat')
@@ -84,6 +93,9 @@ def UpdateCategory(request,cid):
 
 
 def Place(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     disData=tbl_district.objects.all()
     data=tbl_place.objects.all()
 
@@ -119,26 +131,41 @@ def UserRegistration(request):
      return render(request,"Administrator/UserRegistration.html"),
 
 def HomePage(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     return render(request,"Administrator/HomePage.html",)
 
 def UserList(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     data=tbl_user.objects.all()
     return render(request,"Administrator/UserList.html",{'UserData':data})
 
 def UserAccept(request,uid):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     user=tbl_user.objects.get(id=uid)
-    user.userregistration_status=1
+    user.user_status=1
     user.save()
     return redirect("Administrator:UserList")
 
 def UserReject(request,uid):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     user=tbl_user.objects.get(id=uid)
-    user.userregistration_status=2
+    user.user_status=2
     user.save()
     return redirect("Administrator:UserList")
 
 
 def OwnerVerification(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     pendingOwners=tbl_owner.objects.filter(owner_status=0)
     approvedOwners=tbl_owner.objects.filter(owner_status=1)
     rejectedOwners=tbl_owner.objects.filter(owner_status=2)
@@ -150,18 +177,27 @@ def OwnerVerification(request):
     })
 
 def ApproveOwner(request,aid):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     owner=tbl_owner.objects.get(id=aid)
     owner.owner_status=1
     owner.save()
     return redirect("Administrator:OwnerVerification")
 
 def RejectOwner(request,rid):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     owner=tbl_owner.objects.get(id=rid)
     owner.owner_status=2
     owner.save()
     return redirect("Administrator:OwnerVerification")
 
 def TurfVerification(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     pendingTurf=tbl_turf.objects.filter(turf_status=0)
     approvedTurf=tbl_turf.objects.filter(turf_status=1)
     rejectedTurf=tbl_turf.objects.filter(turf_status=2)
@@ -174,6 +210,9 @@ def TurfVerification(request):
 
 
 def ApproveTurf(request,aid):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     turf=tbl_turf.objects.get(id=aid)
     turf.turf_status=1
     turf.save()
@@ -182,6 +221,9 @@ def ApproveTurf(request,aid):
 
 
 def RejectTurf(request,rid):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     turf=tbl_turf.objects.get(id=rid)
     turf.turf_status=2
     turf.save()
@@ -189,6 +231,9 @@ def RejectTurf(request,rid):
 
 
 def Sports(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     sports=tbl_sports.objects.all()
     if request.method=="POST":
         sportName=request.POST.get('txt_sport')
@@ -198,10 +243,16 @@ def Sports(request):
     return render(request,"Administrator/Sports.html",{'sports':sports})
 
 def DeleteSports(request,sid):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     tbl_sports.objects.get(id=sid).delete()
     return render(request,"Administrator/Sports.html",{'msg':"Sport Deleted Successfully"})
 
 def UpdateSports(request,uid):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     sportsOne=tbl_sports.objects.get(id=uid)
     if request.method=="POST":
         sportsOne.sports_name=request.POST.get("txt_sport")
@@ -214,25 +265,40 @@ def UpdateSports(request,uid):
     
 
 def ViewRequests(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     requests = tbl_request.objects.all().order_by('-created_date')
     return render(request, "Administrator/ViewRequests.html", {"requests": requests})
 
 
 def ViewBookings(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     bookings = tbl_booking.objects.all().order_by('-booking_date')
     return render(request, "Administrator/ViewBookings.html", {"bookings": bookings})
 
 
 def ViewComplaints(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     complaints = tbl_complaint.objects.all().order_by('-id')
     return render(request, "Administrator/ViewComplaints.html", {"complaints": complaints})
 
 
 def ViewFeedbacks(request):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     feedback=tbl_feedback.objects.all().order_by('-id')
     return render(request,"Administrator/Feedback.html",{"feedback":feedback})
 
 def reply(request,rid):
+    if 'aid' not in request.session:
+        return redirect('Guest:Login')
+
     complaint=tbl_complaint.objects.get(id=rid)
     if request.method=="POST":
         complaint.complaint_reply=request.POST.get("txt_reply")
@@ -241,3 +307,7 @@ def reply(request,rid):
         return redirect("Administrator:ViewComplaints")
     else:
         return render(request,"Administrator/Reply.html",{"complaint":complaint})
+    
+def logout(request):
+    del request.session["aid"]
+    return redirect("Guest:Login")

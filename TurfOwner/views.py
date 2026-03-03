@@ -7,6 +7,9 @@ from User.models import *
 
 # SPORTS ADD (Owner can manage sports master)
 def Sports(request):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     if request.method == "POST":
         name = request.POST.get('txt_sportsname')
         tbl_sports.objects.create(sports_name=name)
@@ -17,12 +20,18 @@ def Sports(request):
 
 # OWNER PROFILE
 def MyProfile(request):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     OwnerData = tbl_owner.objects.get(id=request.session['oid'])
     return render(request, "TurfOwner/MyProfile.html", {'OwnerData': OwnerData})
 
 
 # EDIT OWNER PROFILE
 def EditProfile(request):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     OwnerData = tbl_owner.objects.get(id=request.session['oid'])
     if request.method == "POST":
         name = request.POST.get('txt_name')
@@ -41,6 +50,9 @@ def EditProfile(request):
 
 # CHANGE OWNER PASSWORD
 def ChangePassword(request):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     OwnerData = tbl_owner.objects.get(id=request.session['oid'])
     
     if request.method == "POST":
@@ -63,9 +75,15 @@ def ChangePassword(request):
 
 # OWNER HOMEPAGE
 def HomePage(request):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     return render(request, "TurfOwner/HomePage.html")
 
 def AddTurf(request):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     owner=tbl_owner.objects.get(id=request.session['oid'])
     disData=tbl_district.objects.all()
 
@@ -88,15 +106,24 @@ def AddTurf(request):
     
 
 def MyTurf(request):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     owner=tbl_owner.objects.get(id=request.session['oid'])
     turfdata=tbl_turf.objects.filter(owner=owner)
     return render(request,"TurfOwner/MyTurf.html",{'turfdata':turfdata})
 
 def DeleteTurf(request,did):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     tbl_turf.objects.get(id=did).delete()
     return render(request,"TurfOwner/MyTurf.html",{'msg':"Turf Deleted Successfully"})
 
 def AddGallery(request,tid):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     turf=tbl_turf.objects.get(id=tid)
     gallery=tbl_turf_gallery.objects.filter(turf=turf)
 
@@ -109,6 +136,9 @@ def AddGallery(request,tid):
     return render(request,"TurfOwner/AddGallery.html",{'gallery':gallery})
 
 def AddTurfSports(request,tid):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     turf=tbl_turf.objects.get(id=tid)
     sports=tbl_sports.objects.all()
     assigned=tbl_turf_sports.objects.filter(turf=turf)
@@ -125,6 +155,9 @@ def AddTurfSports(request,tid):
     })
 
 def AddSlot(request,tid):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     turf = tbl_turf.objects.get(id=tid)
     slots = tbl_slot.objects.filter(turf=turf)
 
@@ -148,6 +181,9 @@ def AddSlot(request,tid):
 
 
 def ViewBookings(request):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     owner = tbl_owner.objects.get(id=request.session['oid'])
 
     bookings = tbl_booking.objects.filter(
@@ -160,6 +196,9 @@ def ViewBookings(request):
     
 
 def RejectBooking(request,bid):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     booking = tbl_booking.objects.get(id=bid)
     booking.booking_status = 3
     booking.save()
@@ -169,6 +208,9 @@ def RejectBooking(request,bid):
 
 
 def ApproveBooking(request,bid):
+    if 'oid' not in request.session:
+        return redirect('Guest:Login')
+
     booking = tbl_booking.objects.get(id=bid)
 
     # Approve selected booking
@@ -184,3 +226,7 @@ def ApproveBooking(request,bid):
 
     request.session['owner_msg'] = "Booking approved. Other pending bookings auto-rejected."
     return redirect("TurfOwner:ViewBookings")
+
+def logout(request):
+    del request.session["oid"]
+    return redirect("Guest:Login")

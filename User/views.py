@@ -8,14 +8,21 @@ from django.http import JsonResponse
 # Create your views here.
 
 def HomePage(request):
-    
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     return render(request,"User/HomePage.html",)
 
 def MyProfile(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     UserData=tbl_user.objects.get(id=request.session['uid'] )
     return render(request,"User/MyProfile.html",{'UserData':UserData})
 
 def EditProfile(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
     UserData=tbl_user.objects.get(id=request.session['uid'] )
     if request.method=="POST":
         name=request.POST.get('txt_name')
@@ -29,6 +36,9 @@ def EditProfile(request):
     return render(request,"User/EditProfile.html",{'UserData':UserData})
 
 def ChangePassword(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
 
     UserData=tbl_user.objects.get(id=request.session['uid'] )
     if request.method=="POST":
@@ -50,6 +60,9 @@ def ChangePassword(request):
 
 
 def ViewTurf(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     ar=[1,2,3,4,5]
     parry=[]
     avg=0
@@ -79,6 +92,9 @@ def ViewTurf(request):
     })
 
 def ViewSlot(request,tid):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     turf = tbl_turf.objects.get(id=tid, turf_status=1)
     slots = tbl_slot.objects.filter(turf=turf)
 
@@ -88,6 +104,8 @@ def ViewSlot(request,tid):
     })
 
 def Ajaxturf(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
 
     ar=[1,2,3,4,5]
     parry=[]
@@ -188,6 +206,9 @@ from datetime import date, datetime
 from django.shortcuts import render, redirect
 
 def ConfirmBooking(request, sid):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
 
     slot = tbl_slot.objects.get(id=sid)
     user = tbl_user.objects.get(id=request.session['uid'])
@@ -281,6 +302,9 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 
 def MyBookings(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
 
     bookings = tbl_booking.objects.filter(user=request.session['uid'])
 
@@ -319,6 +343,9 @@ def MyBookings(request):
     return render(request,"User/MyBookings.html",{"bookings":booking_data})
 
 def CancelBooking(request,bid):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     booking = tbl_booking.objects.get(id=bid)
     booking.booking_status = 2
     booking.save()
@@ -331,8 +358,9 @@ from django.db.models import Sum
 from decimal import Decimal
 
 def payment(request,bid):
+
     if 'uid' not in request.session:
-        return redirect('Guest:login')
+        return redirect('Guest:Login')
 
     booking = tbl_booking.objects.get(id=bid)
 
@@ -360,15 +388,19 @@ def payment(request,bid):
 
 def loader(request):
     if 'uid' not in request.session:
-        return redirect('Guest:login')
+        return redirect('Guest:Login')
     return render(request,"User/Loader.html")
 
 def paymentsuc(request):
     if 'uid' not in request.session:
-        return redirect('Guest:login')
+        return redirect('Guest:Login')
     return render(request,"User/Paymentsuc.html")
 
 def AddRequest(request, bid):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
+
     booking = tbl_booking.objects.get(id=bid)
 
     if request.method == "POST":
@@ -388,11 +420,17 @@ def AddRequest(request, bid):
     return render(request, "User/AddRequest.html", {"booking": booking})
 
 def ViewRequest(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     requests = tbl_request.objects.all().order_by('-created_date')
     return render(request, "User/ViewRequest.html", {"requests": requests})
 
 
 def JoinRequest(request, rid):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     req = tbl_request.objects.get(id=rid)
     user = tbl_user.objects.get(id=request.session['uid'])
 
@@ -418,6 +456,9 @@ def JoinRequest(request, rid):
     return redirect("User:ViewRequest")
 
 def RequestRefund(request,id):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
 
     booking = tbl_booking.objects.get(id=id)
 
@@ -432,6 +473,9 @@ def RequestRefund(request,id):
 
 
 def rating(request,mid):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     parray=[1,2,3,4,5]
     mid=mid
     # wdata=tbl_booking.objects.get(id=mid)
@@ -450,6 +494,9 @@ def rating(request,mid):
          return render(request,"User/Rating.html",{'mid':mid})
 
 def ajaxstar(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     parray=[1,2,3,4,5]
     rating_data=request.GET.get('rating_data')
     user_review=request.GET.get('user_review')
@@ -460,6 +507,9 @@ def ajaxstar(request):
     return render(request,"User/AjaxRating.html",{'data':stardata,'ar':parray})
 
 def starrating(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     r_len = 0
     five = four = three = two = one = 0
     # cdata = tbl_booking.objects.get(id=request.GET.get("pdt"))
@@ -488,6 +538,9 @@ def starrating(request):
 
 
 def Complaint(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     user=tbl_user.objects.get(id=request.session['uid'])
     if request.method=="POST":
         title=request.POST.get('txt_title')
@@ -498,17 +551,26 @@ def Complaint(request):
         return render(request,"User/Complaint.html")
     
 def MyComplaints(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     user=tbl_user.objects.get(id=request.session['uid'])
     complaints=tbl_complaint.objects.filter(user=user).order_by('-complaint_date')
     return render(request,"User/MyComplaints.html",{'complaints':complaints})
 
 def DeleteComplaint(request,cid):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     complaint=tbl_complaint.objects.get(id=cid)
     complaint.delete()
     return redirect(request,"User/MyComplaints.html",{'msg':'Complaint submitted successfully'})
     
 
 def Feedback(request):
+    if 'uid' not in request.session:
+        return redirect('Guest:Login')
+
     user=tbl_user.objects.get(id=request.session['uid'])
     if request.method=="POST":
         content=request.POST.get('txt_content')
@@ -516,3 +578,7 @@ def Feedback(request):
         return render(request,"User/Feedback.html",{'msg':'Feedback submitted successfully'})
     else:
         return render(request,"User/Feedback.html")
+    
+def logout(request):
+    del request.session["uid"]
+    return redirect("Guest:Login")

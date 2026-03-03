@@ -41,4 +41,5 @@ urlpatterns = [
 
     path('Feedback/',views.Feedback,name="Feedback"),
 
+    path('logout/',views.logout,name="logout"),
 ]

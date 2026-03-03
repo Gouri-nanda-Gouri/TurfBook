@@ -20,4 +20,7 @@ path('AddSlot/<int:tid>',views.AddSlot,name="AddSlot"),
 path('ApproveBooking/<int:bid>',views.ApproveBooking,name="ApproveBooking"),
 path('RejectBooking/<int:bid>',views.RejectBooking,name="RejectBooking"),
 
+    path('logout/',views.logout,name="logout"),
+
+
 ]

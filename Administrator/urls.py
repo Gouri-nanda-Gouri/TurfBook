@@ -52,6 +52,8 @@ urlpatterns = [
      path('ViewComplaints/',views.ViewComplaints,name="ViewComplaints"),
      path('Reply/<int:rid>/',views.reply,name="Reply"),
 
+     path('logout/',views.logout,name="logout"),
+
      
 
 ]
