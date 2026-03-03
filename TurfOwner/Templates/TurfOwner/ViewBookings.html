@@ -31,7 +31,8 @@
 
             <td>{{i.slot.turf.turf_name}}</td>
 
-            <td>{{i.slot.slot_time}}</td>
+            <td>{{ i.slot.slot_start_time|time:"h:i A" }} -
+{{ i.slot.slot_end_time|time:"h:i A" }}</td>
             <td>{{i.sport.sports_name}}</td>
 
             <td>{{i.booking_todate}}</td>

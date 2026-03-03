@@ -6,7 +6,9 @@
     <title>Reply</title>
 </head>
 <body>
-    <table>
+   <form action="" method="post">
+    {% csrf_token %}
+     <table>
         <tr>
             <td>Content</td>
             <td><textarea name="txt_reply" id=""></textarea></td>
@@ -15,5 +17,6 @@
             <td><input type="submit" value="Submit"></td>
         </tr>
     </table>
+   </form>
 </body>
 </html>

@@ -24,10 +24,10 @@ class tbl_turf_sports(models.Model):
 
 
 class tbl_slot(models.Model):
-    turf=models.ForeignKey(tbl_turf,on_delete=models.CASCADE)
-    slot_time=models.CharField(max_length=50)
-    slot_amount=models.DecimalField(max_digits=6,decimal_places=2)
-
+    turf = models.ForeignKey(tbl_turf, on_delete=models.CASCADE)
+    slot_start_time = models.TimeField(null=True)
+    slot_end_time = models.TimeField(null=True)
+    slot_amount = models.DecimalField(max_digits=6, decimal_places=2)
 
 
 

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Booking</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirm Booking</title>
 </head>
+
 <body>
 
 <h2>Confirm Booking</h2>
@@ -21,16 +22,20 @@
 
 <tr>
 <td>Slot Time</td>
-<td>{{slot.slot_time}}</td>
+<td>
+{{ slot.slot_start_time|time:"h:i A" }} -
+{{ slot.slot_end_time|time:"h:i A" }}
+</td>
 </tr>
+
 <tr>
 <td>Select Sport</td>
 <td>
 <select name="sel_sport" required>
-    <option value="">--Select Sport--</option>
-    {% for s in sports %}
-        <option value="{{s.id}}">{{s.sports_name}}</option>
-    {% endfor %}
+<option value="">--Select Sport--</option>
+{% for s in sports %}
+<option value="{{s.id}}">{{s.sports_name}}</option>
+{% endfor %}
 </select>
 </td>
 </tr>
@@ -43,7 +48,7 @@
 <tr>
 <td>Play Date</td>
 <td>
-<input type="date" name="txt_date" required>
+<input type="date" name="txt_date" id="play_date" min="{{today}}" required>
 </td>
 </tr>
 
@@ -64,10 +69,54 @@
 
 {% if msg %}
 <script>
-    alert("{{msg}}");
-    // window.location.href="{% url 'User:MyBookings' %}";
+alert("{{msg}}");
 </script>
 {% endif %}
 
 </body>
 </html>
+
+<script>
+document.querySelector("form").addEventListener("submit", function(e){
+
+var selectedDate = document.getElementById("play_date").value;
+var today = new Date().toISOString().split("T")[0];
+
+if(selectedDate < today){
+alert("Play date cannot be in the past");
+e.preventDefault();
+}
+
+});
+</script>
+<script>
+var slotStartTime = "{{ slot.slot_start_time|time:'H:i' }}";
+</script>
+
+<script>
+document.querySelector("form").addEventListener("submit", function(e){
+
+var selectedDate = document.getElementById("play_date").value;
+var today = new Date().toISOString().split("T")[0];
+
+if(selectedDate < today){
+    alert("Play date cannot be in the past");
+    e.preventDefault();
+    return;
+}
+
+if(selectedDate == today){
+
+    var now = new Date();
+    var currentTime = now.getHours() + ":" + now.getMinutes();
+
+    var slotTime = slotStartTime;
+
+    if(currentTime > slotTime){
+        alert("This slot time has already passed");
+        e.preventDefault();
+    }
+}
+
+});
+</script>

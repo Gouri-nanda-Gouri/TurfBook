@@ -1,93 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>My Bookings</title>
+<meta charset="UTF-8">
+<title>My Bookings</title>
 </head>
 
 <body>
 
-    <h2>My Bookings</h2>
+<h2>My Bookings</h2>
 
-    <table border="1" cellpadding="8">
+<table border="1" cellpadding="8">
 
-        <tr>
-            <th>Sl No</th>
-            <th>Turf</th>
-            <th>Slot Time</th>
-            <th>Sport</th>
-            <th>Booked On</th>
-            <th>Play Date</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
+<tr>
+<th>Sl No</th>
+<th>Turf</th>
+<th>Slot Time</th>
+<th>Sport</th>
+<th>Booked On</th>
+<th>Play Date</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
 
-        {% for i in bookings %}
-        <tr>
-            <td>{{forloop.counter}}</td>
+{% for item in bookings %}
+{% with i=item.data %}
 
-            <td>{{i.slot.turf.turf_name}}</td>
+<tr>
+<td>{{forloop.counter}}</td>
 
-            <td>{{i.slot.slot_time}}</td>
-            <td>{{i.sport.sports_name}}</td>
+<td>{{i.slot.turf.turf_name}}</td>
 
+<td>
+{{ i.slot.slot_start_time|time:"h:i A" }} -
+{{ i.slot.slot_end_time|time:"h:i A" }}
+</td>
 
-            <td>{{i.booking_date}}</td>
+<td>{{i.sport.sports_name}}</td>
 
-            <td>{{i.booking_todate}}</td>
+<td>{{i.booking_date}}</td>
 
+<td>{{i.booking_todate}}</td>
 
-            <td>
-                {% if i.booking_status == 0 %}
-                Pending
-                {% elif i.booking_status == 1 %}
-                Confirmed
-                {% elif i.booking_status == 2 %}
-                Cancelled
-                {% elif i.booking_status == 3 %} Rejected
-                {% elif i.booking_status == 4 %} Booking Completed
+<td>
+{% if i.booking_status == 0 %}
+Pending
+{% elif i.booking_status == 1 %}
+Confirmed
+{% elif i.booking_status == 2 %}
+Cancelled
+{% elif i.booking_status == 3 %}
+Rejected
+{% elif i.booking_status == 4 %}
+Booking Completed
+{% endif %}
+</td>
 
-                {% endif %}
-            </td>
+<td>
 
-            <td>
-                {% if i.booking_status == 0 %}
-                <a href="{% url 'User:CancelBooking' i.id %}">Cancel</a>
+{% if i.booking_status == 0 %}
+<a href="{% url 'User:CancelBooking' i.id %}">Cancel</a>
 
-                {% elif i.booking_status == 1 %}
-                Approved
-                <a href="{% url 'User:payment' i.id %}">Pay Now</a>
+{% elif i.booking_status == 1 %}
+Approved
+<a href="{% url 'User:payment' i.id %}">Pay Now</a>
 
-                {% elif i.booking_status == 2 %}
-                Cancelled
+{% elif i.booking_status == 2 %}
+Cancelled
 
-                {% elif i.booking_status == 3 %}
-                Rejected
+{% elif i.booking_status == 3 %}
+Rejected
 
-                {% elif i.booking_status == 4 %}
-                Booking Completed
-                <br>
-                <a href="{% url 'User:AddRequest' i.id %}">Request Players</a>
-                <br>
-                <a href="{% url 'User:rating' i.slot.turf.id %}">Rate</a>
-                {% endif %}
-            </td>
+{% elif i.booking_status == 4 %}
+Booking Completed
+<br>
 
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="8" align="center">No bookings found</td>
-        </tr>
-        {% endfor %}
+<a href="{% url 'User:AddRequest' i.id %}">Request Players</a>
+<br>
 
-    </table>
+<a href="{% url 'User:rating' i.slot.turf.id %}">Rate</a>
+
+{% if item.refund %}
+<br>
+<a href="{% url 'User:RequestRefund' i.id %}">Request Refund</a>
+{% endif %}
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endwith %}
+{% empty %}
+
+<tr>
+<td colspan="8" align="center">No bookings found</td>
+</tr>
+
+{% endfor %}
+
+</table>
 
 </body>
-
 </html>
+
 {% if msg %}
 <script>
-    alert("{{msg}}");
+alert("{{msg}}");
 </script>
 {% endif %}

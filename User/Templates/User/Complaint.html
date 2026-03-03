@@ -11,7 +11,7 @@
         <table border="1">
             <tr>
                 <td> Complaint Title </td>
-                <td> <input type="text" name="txt_complaint" placeholder="Enter Complaint"></td>
+                <td> <input type="text" name="txt_title" placeholder="Enter Complaint"></td>
             </tr>
             <tr>
                 <td> Complaint Content </td>
@@ -29,3 +29,11 @@
     </form>
 </body>
 </html>
+
+
+{% if msg %}
+<script>
+    alert("{{msg}}");
+    window.location.href="{% url 'User:MyComplaints' %}";
+</script>
+{% endif %}

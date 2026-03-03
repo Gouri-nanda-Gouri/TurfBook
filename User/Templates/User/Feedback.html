@@ -6,7 +6,7 @@
     <title>Feedback</title>
 </head>
 <body>
-    <table>
+    <table border="1">
         <tr>
             <td>Content</td>
             <td><textarea name="txt_content" id=""></textarea></td>
@@ -15,6 +15,20 @@
             <td><input type="submit" value="Submit"></td>
         </tr>
 
+    </table>
+    <table border="1">
+        <tr>
+            <th>Slno</th>
+            <th>Feedback Content</th>
+            <th>Feedback Date</th>
+        </tr>
+        {% for f in feedbacks %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ f.feedback_content }}</td>
+            <td>{{ f.feedback_date }}</td>
+        </tr>
+        {% endfor %}
     </table>
 </body>
 </html>

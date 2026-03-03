@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaints</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Complaint Title</th>
+            <th>Complaint Content</th>
+            <th>Complaint Reply</th>
+            <th>Complaint Date</th>
+            <th>Actions</th>
+        </tr>
+        {% for c in complaints %}
+        <tr>
+            <td>{{ c.complaint_title }}</td>
+            <td>{{ c.complaint_content }}</td>
+            <td>{{ c.complaint_date }}</td>
+            <td>
+                {% if c.complaint_reply %}
+                    {{ c.complaint_reply }}
+                {% else %}
+                    No reply yet
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'User:DeleteComplaint' c.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+
+{% if msg %}
+<script>
+    alert("{{msg}}");
+    window.location.href="{% url 'User:MyComplaints' %}";
+</script>
+{% endif %}

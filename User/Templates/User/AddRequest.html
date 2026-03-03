@@ -10,9 +10,10 @@
 
 <p>
 Turf: {{ booking.slot.turf.turf_name }} <br>
-Sport: {{ booking.sport.sports_name }}
-Date: {{ booking.slot.date }} <br>
-Time: {{ booking.slot.slot_time }}
+Sport: {{ booking.sport.sports_name }}<br>  
+Date:  {{ booking.booking_date }} <br>
+Time:{{ booking.slot.slot_start_time|time:"h:i A" }} -
+{{ booking.slot.slot_end_time|time:"h:i A" }}
 </p>
 
 <form method="POST">

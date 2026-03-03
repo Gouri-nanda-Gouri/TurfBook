@@ -6,7 +6,6 @@
     <title>Add Slot</title>
 </head>
 <body>
-
 <h2>Add Slot</h2>
 
 <form method="POST">
@@ -15,16 +14,23 @@
 <table border="1" cellpadding="8">
 
 <tr>
-    <td>Slot Time</td>
+    <td>Start Time</td>
     <td>
-        <input type="text" name="txt_time" placeholder="Example: 6AM - 7AM" required>
+        <input type="time" name="txt_start" required>
+    </td>
+</tr>
+
+<tr>
+    <td>End Time</td>
+    <td>
+        <input type="time" name="txt_end" required>
     </td>
 </tr>
 
 <tr>
     <td>Amount</td>
     <td>
-        <input type="text" name="txt_amount" required>
+        <input type="number" name="txt_amount" required>
     </td>
 </tr>
 
@@ -39,7 +45,6 @@
 </form>
 
 <br><br>
-
 <h3>Existing Slots</h3>
 
 <table border="1" cellpadding="8">
@@ -53,8 +58,11 @@
 {% for i in slots %}
 <tr>
     <td>{{forloop.counter}}</td>
-    <td>{{i.slot_time}}</td>
-    <td>{{i.slot_amount}}</td>
+    <td>
+        {{ i.slot_start_time|time:"h:i A" }} -
+        {{ i.slot_end_time|time:"h:i A" }}
+    </td>
+    <td>₹{{i.slot_amount}}</td>
 </tr>
 {% empty %}
 <tr>

@@ -1,14 +1,30 @@
-<h2>Player Requests</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Requests</title>
+</head>
+<body>
+  <h2>Player Requests</h2>
 
 {% for r in requests %}
 
 <p>
 <strong>Turf:</strong> {{ r.slot.turf.turf_name }} <br>
+
+<strong>Place:</strong> {{ r.slot.turf.place.place_name }} <br>
+
 <strong>Sport:</strong> {{ r.sport.sports_name }} <br>
-<strong>Date:</strong> {{ r.slot.date }} <br>
-<strong>Time:</strong> {{ r.slot.slot_time }} <br>
+
+<strong>Booking Date:</strong> {{ r.booking.booking_date }} <br>
+
+
+<strong>Time:</strong>{{ r.slot.slot_start_time|time:"h:i A" }} -
+{{ r.slot.slot_end_time|time:"h:i A" }}<br>
 
 <strong>Players Needed:</strong> {{ r.request_players }} <br>
+
 <strong>Joined:</strong> {{ r.joined_players }} <br>
 
 <strong>Description:</strong> {{ r.request_description }} <br>
@@ -26,3 +42,5 @@
 <hr>
 
 {% endfor %}
+</body>
+</html>

@@ -6,7 +6,7 @@
     <title>View Complaints</title>
 </head>
 <body>
-    <table>
+    <table border="1">
         <tr>
             <td>SlNo</td>
             <td>User Name</td>
@@ -17,14 +17,20 @@
         </tr>
         {% for i in complaints %}
          <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ i.user.username }}</td>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.user.user_name }}</td>
             <td>{{ i.complaint_title }}</td>
             <td>{{ i.complaint_content }}</td>
             <td>{{ i.complaint_date }}</td>
-            <td><a href="{% url 'Administrator:Reply' i.id %}">Reply</a></td>
+            <td>
+                {% if i.complaint_reply %}
+                    Replied
+                {% else %}
+                     <a href="{% url 'Administrator:Reply' i.id %}">Reply</a>
+                {% endif %}
 
         </tr>
+        {% endfor %}
     </table>
 </body>
 </html>

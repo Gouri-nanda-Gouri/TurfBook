@@ -5,13 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Truf</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
 <body>
     <tr>
-        <td>District</td>   
+        <td>District</td>
         <td>
 
             <select name="sel_district" id="sel_district">
@@ -34,6 +36,29 @@
             </select>
         </td>
     </tr>
+    <tr>
+        <td>Capacity</td>
+        <td>
+            <select id="sel_capacity">
+                <option value="">--Select Capacity--</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+                <option value="11">11</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Sports</td>
+        <td>
+            <select id="sel_sports">
+                <option value="">--Select Sports--</option>
+                {% for i in sports %}
+                <option value="{{i.id}}">{{i.sports_name}}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
 
     <table border="1" id="result">
         <tr>
@@ -48,22 +73,21 @@
             <th>Action</th>
         </tr>
 
-        {% for  i,j in turfs %}
+        {% for i,j in turfs %}
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{i.turf_name}}</td>
             <td>{{i.turf_description}}</td>
             <td>{{i.turf_contact_number}}</td>
             <td>{{i.turf_capacity}}</td>
-           <td>
-    {% for k in ar %}
-        {% if k <= j %}
-            <i class="fa-solid fa-star" style="color:gold;"></i>
-        {% else %}
-            <i class="fa-solid fa-star" style="color:lightgray;"></i>
-        {% endif %}
-    {% endfor %}
-</td>
+            <td>
+                {% for k in ar %}
+                {% if k <= j %} <i class="fa-solid fa-star" style="color:gold;"></i>
+                    {% else %}
+                    <i class="fa-solid fa-star" style="color:lightgray;"></i>
+                    {% endif %}
+                    {% endfor %}
+            </td>
             <td>{{i.place.place_name}}</td>
             <td>
                 <img src="{{i.turf_image.url}}" width="60">
@@ -85,26 +109,44 @@
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    $("#sel_district").change(function () {
-        var disid = $(this).val();
-        var ur = "{% url 'Guest:Ajaxplace' %}";
-        $.ajax({
-            url: ur,
-            data: { disid: disid },
-            success: function (data) {
-                $("#sel_place").html(data);
-            },
+    $(document).ready(function () {
+
+        $("#sel_district").change(function () {
+            var disid = $(this).val();
+            var ur = "{% url 'Guest:Ajaxplace' %}";
+
+            $.ajax({
+                url: ur,
+                data: { disid: disid },
+                success: function (data) {
+                    $("#sel_place").html(data);
+                }
+            });
         });
-    });
-    $("#sel_place").change(function () {
-        var placeid = $(this).val();
-        var ur = "{% url 'User:Ajaxturf' %}";
-        $.ajax({
-            url: ur,
-            data: { placeid: placeid },
-            success: function (data) {
-                $("#result").html(data);
-            },
-        });
+
+        function loadTurf() {
+            var placeid = $("#sel_place").val();
+            var capacity = $("#sel_capacity").val();
+            var sports = $("#sel_sports").val();
+
+            var ur = "{% url 'User:Ajaxturf' %}";
+
+            $.ajax({
+                url: ur,
+                data: {
+                    placeid: placeid,
+                    capacity: capacity,
+                    sports: sports
+                },
+                success: function (data) {
+                    $("#result").html(data);
+                }
+            });
+        }
+
+        $("#sel_place").change(loadTurf);
+        $("#sel_capacity").change(loadTurf);
+        $("#sel_sports").change(loadTurf);
+
     });
 </script>

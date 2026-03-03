@@ -19,6 +19,7 @@ urlpatterns = [
      path('ConfirmBooking/<int:sid>/',views.ConfirmBooking, name="ConfirmBooking"),
      path('MyBookings/',views.MyBookings,name="MyBookings"),
      path('CancelBooking/<int:bid>',views.CancelBooking,name="CancelBooking"),
+     path('RequestRefund/<int:bid>',views.RequestRefund,name="RequestRefund"),
     
     path("payment/<int:bid>",views.payment,name="payment"),
     path('loader/',views.loader, name='loader'),
@@ -32,5 +33,12 @@ urlpatterns = [
     path('rating/<int:mid>',views.rating,name="rating"),
     path('ajaxstar/',views.ajaxstar,name="ajaxstar"),
     path('starrating/',views.starrating,name="starrating"),
+
+    path('Complaint/',views.Complaint,name="Complaint"),
+    path('MyComplaints/',views.MyComplaints,name="MyComplaints"),
+    path('DeleteComplaint/<int:cid>',views.DeleteComplaint,name="DeleteComplaint"),
+
+
+    path('Feedback/',views.Feedback,name="Feedback"),
 
 ]

@@ -17,20 +17,6 @@ class tbl_booking(models.Model):
     booking_players=models.IntegerField(default=1) 
 
 
-
-class tbl_request(models.Model):
-    booking = models.ForeignKey(tbl_booking, on_delete=models.CASCADE)
-    user = models.ForeignKey(tbl_user, on_delete=models.CASCADE)
-    slot = models.ForeignKey(tbl_slot, on_delete=models.CASCADE)
-    sport = models.ForeignKey(tbl_sports, on_delete=models.CASCADE)
-
-    request_players = models.IntegerField()
-    request_description = models.CharField(max_length=200)
-
-    request_status = models.IntegerField(default=0)  # 0=open 1=closed
-    created_date = models.DateField(auto_now_add=True)
-
-
 class tbl_request(models.Model):
     booking = models.ForeignKey(tbl_booking, on_delete=models.CASCADE)
     user = models.ForeignKey(tbl_user, on_delete=models.CASCADE)
@@ -49,6 +35,20 @@ class tbl_request_join(models.Model):
     request = models.ForeignKey(tbl_request, on_delete=models.CASCADE)
     user = models.ForeignKey(tbl_user, on_delete=models.CASCADE)
     joined_date = models.DateField(auto_now_add=True)
+
+class tbl_refund(models.Model):
+
+    booking = models.ForeignKey(tbl_booking,on_delete=models.CASCADE)
+    user = models.ForeignKey(tbl_user,on_delete=models.CASCADE)
+
+    refund_reason = models.CharField(max_length=200)
+
+    refund_status = models.IntegerField(default=0)
+    # 0 = pending
+    # 1 = approved
+    # 2 = rejected
+
+    refund_date = models.DateTimeField(auto_now_add=True)
 
 
 class tbl_rating(models.Model):

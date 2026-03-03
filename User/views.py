@@ -87,39 +87,48 @@ def ViewSlot(request,tid):
         'slots': slots
     })
 
-
 def Ajaxturf(request):
+
     ar=[1,2,3,4,5]
     parry=[]
-    avg=0
 
     placeid = request.GET.get('placeid')
+    capacity = request.GET.get('capacity')
+    sports = request.GET.get('sports')
 
-    turf = tbl_turf.objects.filter(
-        place=placeid,
-        turf_status=1
-    )
+    turf = tbl_turf.objects.filter(turf_status=1)
+
+    if placeid:
+        turf = turf.filter(place=placeid)
+
+    if capacity:
+        turf = turf.filter(turf_capacity__gte=capacity)
+
+    if sports:
+        turf = turf.filter(tbl_turf_sports__sports=sports)
+
+    turf = turf.distinct()
 
     for i in turf:
         tot=0
+        avg=0
         ratecount=tbl_rating.objects.filter(truf=i.id).count()
+
         if ratecount>0:
             ratedata=tbl_rating.objects.filter(truf=i.id)
             for j in ratedata:
-                tot=tot+j.rating_data
-                avg=tot//ratecount
-            parry.append(avg)
-        else:
-            parry.append(0)
+                tot += j.rating_data
+            avg = tot // ratecount
 
-    datas=zip(turf,parry)
+        parry.append(avg)
+
+    datas = zip(turf, parry)
 
     return render(request,"User/Ajaxturf.html",{
         'data':datas,
         'ar':ar
     })
-
-    return render(request,"User/Ajaxturf.html",{'data':turf})
+    # return render(request,"User/Ajaxturf.html",{'data':turf})
 
 # def BookSlot(request,sid):
 #     slot = tbl_slot.objects.get(id=sid)
@@ -175,14 +184,11 @@ def Ajaxturf(request):
 #         'today':date.today()
 #     })
 
-
-
-from datetime import date
-from decimal import Decimal
-from datetime import date
-from decimal import Decimal
+from datetime import date, datetime
+from django.shortcuts import render, redirect
 
 def ConfirmBooking(request, sid):
+
     slot = tbl_slot.objects.get(id=sid)
     user = tbl_user.objects.get(id=request.session['uid'])
     sports = tbl_sports.objects.all()
@@ -192,43 +198,66 @@ def ConfirmBooking(request, sid):
         play_date = request.POST.get('txt_date')
         sport_id = request.POST.get('sel_sport')
 
-        # validations
         if not play_date:
             return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,'sports':sports,'today':date.today(),
+                'slot':slot,
+                'sports':sports,
+                'today':date.today(),
                 'msg':'Please select play date'
             })
 
         if not sport_id:
             return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,'sports':sports,'today':date.today(),
+                'slot':slot,
+                'sports':sports,
+                'today':date.today(),
                 'msg':'Please select sport'
             })
 
         play_date_obj = date.fromisoformat(play_date)
 
+        # ❌ Prevent past date booking
         if play_date_obj < date.today():
             return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,'sports':sports,'today':date.today(),
+                'slot':slot,
+                'sports':sports,
+                'today':date.today(),
                 'msg':'Cannot book past date'
             })
 
-        # prevent duplicate booking
+        # ❌ Prevent booking past slot time (if today)
+        if play_date_obj == date.today():
+
+            slot_datetime = datetime.combine(
+                play_date_obj,
+                slot.slot_start_time
+            )
+
+            if slot_datetime < datetime.now():
+                return render(request,"User/ConfirmBooking.html",{
+                    'slot':slot,
+                    'sports':sports,
+                    'today':date.today(),
+                    'msg':'This slot time has already passed'
+                })
+
+        # ❌ Prevent duplicate booking
         if tbl_booking.objects.filter(
             slot=slot,
             booking_todate=play_date_obj
         ).exists():
+
             return render(request,"User/ConfirmBooking.html",{
-                'slot':slot,'sports':sports,'today':date.today(),
+                'slot':slot,
+                'sports':sports,
+                'today':date.today(),
                 'msg':'This slot is already booked for the selected date'
             })
 
         sport = tbl_sports.objects.get(id=sport_id)
 
-        # slot amount = total amount
         total_amount = slot.slot_amount
 
-        # save booking
         tbl_booking.objects.create(
             user=user,
             slot=slot,
@@ -248,17 +277,46 @@ def ConfirmBooking(request, sid):
         'today':date.today()
     })
 
+from datetime import datetime, timedelta
+from django.utils import timezone
+
 def MyBookings(request):
-    user = tbl_user.objects.get(id=request.session['uid'])
-    bookings = tbl_booking.objects.filter(user=user).order_by('-booking_date')
 
-    msg = request.session.pop('booking_msg', None)
+    bookings = tbl_booking.objects.filter(user=request.session['uid'])
 
-    return render(request,"User/MyBookings.html",{
-        'bookings':bookings,
-        'msg':msg
-    })
+    booking_data = []
 
+    now = timezone.localtime(timezone.now())
+
+    for b in bookings:
+
+        refund_allowed = False
+
+        try:
+            req = tbl_request.objects.get(booking=b)
+
+            slot_datetime = datetime.combine(
+                b.booking_todate,
+                b.slot.slot_start_time
+            )
+
+            slot_datetime = timezone.make_aware(slot_datetime)
+            slot_datetime = timezone.localtime(slot_datetime)
+
+            check_time = slot_datetime - timedelta(minutes=5)
+
+            if now >= check_time and req.joined_players < req.request_players:
+                refund_allowed = True
+
+        except tbl_request.DoesNotExist:
+            pass
+
+        booking_data.append({
+            "data": b,
+            "refund": refund_allowed
+        })
+
+    return render(request,"User/MyBookings.html",{"bookings":booking_data})
 
 def CancelBooking(request,bid):
     booking = tbl_booking.objects.get(id=bid)
@@ -359,6 +417,18 @@ def JoinRequest(request, rid):
 
     return redirect("User:ViewRequest")
 
+def RequestRefund(request,id):
+
+    booking = tbl_booking.objects.get(id=id)
+
+    tbl_refund.objects.create(
+        booking=booking,
+        user=booking.user,
+        refund_reason="Players not filled"
+    )
+
+    return redirect("User:MyBookings")
+
 
 
 def rating(request,mid):
@@ -426,6 +496,16 @@ def Complaint(request):
         return render(request,"User/Complaint.html",{'msg':'Complaint submitted successfully'})
     else:
         return render(request,"User/Complaint.html")
+    
+def MyComplaints(request):
+    user=tbl_user.objects.get(id=request.session['uid'])
+    complaints=tbl_complaint.objects.filter(user=user).order_by('-complaint_date')
+    return render(request,"User/MyComplaints.html",{'complaints':complaints})
+
+def DeleteComplaint(request,cid):
+    complaint=tbl_complaint.objects.get(id=cid)
+    complaint.delete()
+    return redirect(request,"User/MyComplaints.html",{'msg':'Complaint submitted successfully'})
     
 
 def Feedback(request):

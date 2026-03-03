@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>View Slots</title>
+<title>View Slots</title>
 </head>
 <body>
 
@@ -10,35 +10,35 @@
 <table border="1" cellpadding="8">
 
 <tr>
-    <td>Image</td>
-    <td>
-        <img src="{{turf.turf_image.url}}" width="120">
-    </td>
+<td>Image</td>
+<td>
+<img src="{{turf.turf_image.url}}" width="120">
+</td>
 </tr>
 
 <tr>
-    <td>Turf Name</td>
-    <td>{{turf.turf_name}}</td>
+<td>Turf Name</td>
+<td>{{turf.turf_name}}</td>
 </tr>
 
 <tr>
-    <td>Description</td>
-    <td>{{turf.turf_description}}</td>
+<td>Description</td>
+<td>{{turf.turf_description}}</td>
 </tr>
 
 <tr>
-    <td>Capacity</td>
-    <td>{{turf.turf_capacity}}</td>
+<td>Capacity</td>
+<td>{{turf.turf_capacity}}</td>
 </tr>
 
 <tr>
-    <td>Contact</td>
-    <td>{{turf.turf_contact_number}}</td>
+<td>Contact</td>
+<td>{{turf.turf_contact_number}}</td>
 </tr>
 
 <tr>
-    <td>Place</td>
-    <td>{{turf.place.place_name}}</td>
+<td>Place</td>
+<td>{{turf.place.place_name}}</td>
 </tr>
 
 </table>
@@ -50,26 +50,33 @@
 <table border="1" cellpadding="8">
 
 <tr>
-    <th>Sl No</th>
-    <th>Slot Time</th>
-    <th>Price</th>
-    <th>Action</th>
+<th>Sl No</th>
+<th>Slot Time</th>
+<th>Price</th>
+<th>Action</th>
 </tr>
 
 {% for i in slots %}
 <tr>
-    <td>{{forloop.counter}}</td>
-    <td>{{i.slot_time}}</td>
-    <td>₹{{i.slot_amount}}</td>
-    <td>
-            <a href="{% url 'User:ConfirmBooking' i.id %}">
-                Book Now
-            </a>
-    </td>
+<td>{{forloop.counter}}</td>
+
+<td>
+{{ i.slot_start_time|time:"h:i A" }} -
+{{ i.slot_end_time|time:"h:i A" }}
+</td>
+
+<td>₹{{i.slot_amount}}</td>
+
+<td>
+<a href="{% url 'User:ConfirmBooking' i.id %}">
+Book Now
+</a>
+</td>
+
 </tr>
 {% empty %}
 <tr>
-    <td colspan="4" align="center">No slots available</td>
+<td colspan="4" align="center">No slots available</td>
 </tr>
 {% endfor %}
 

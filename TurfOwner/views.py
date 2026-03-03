@@ -124,20 +124,27 @@ def AddTurfSports(request,tid):
         'assigned':assigned
     })
 
-
 def AddSlot(request,tid):
-    turf=tbl_turf.objects.get(id=tid)
-    slots=tbl_slot.objects.filter(turf=turf)
+    turf = tbl_turf.objects.get(id=tid)
+    slots = tbl_slot.objects.filter(turf=turf)
 
-    if request.method=="POST":
+    if request.method == "POST":
         tbl_slot.objects.create(
             turf=turf,
-            slot_time=request.POST.get('txt_time'),
+            slot_start_time=request.POST.get('txt_start'),
+            slot_end_time=request.POST.get('txt_end'),
             slot_amount=request.POST.get('txt_amount')
         )
-        return render(request,"TurfOwner/AddSlot.html",{'slots':slots,'msg':"Slot Added Successfully",'tid':tid})
+        return render(request,"TurfOwner/AddSlot.html",{
+            'slots':slots,
+            'msg':"Slot Added Successfully",
+            'tid':tid
+        })
 
-    return render(request,"TurfOwner/AddSlot.html",{'slots':slots})
+    return render(request,"TurfOwner/AddSlot.html",{
+        'slots':slots,
+        'tid':tid
+    })
 
 
 def ViewBookings(request):
